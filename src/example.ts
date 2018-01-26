@@ -1,16 +1,15 @@
 import { CLI } from "./index";
 
-
 const cli = new CLI();
 
-cli.registerCommand("hello", {
+cli.command("hello", {
     action: (params, opts, done) => {
         console.log("Hello Back!");
         done();
     }
 });
 
-cli.registerCommand("do", {
+cli.command("do", {
     action: (a, b, c) => c(),
     subcommands: {
         something: {

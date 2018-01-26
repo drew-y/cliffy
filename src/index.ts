@@ -118,7 +118,7 @@ export class CLI {
         this.delimiter = delimiter;
     }
 
-    registerCommand(command: string, opts: Command) {
+    command(command: string, opts: Command) {
         this.commands[command] = opts;
     }
 
