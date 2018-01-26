@@ -1,23 +1,8 @@
 import readline = require("readline");
 import { ReadStream } from "fs";
 import { WriteStream } from "tty";
-
-export interface Parameter {
-    label: string;
-    type?: "boolean" | "number" | "string";
-    description?: string;
-}
-
-export interface Command {
-    description?: string;
-    options?: ({
-        option: string;
-        description?: string;
-    } | string)[];
-    parameters?: Parameter[],
-    action: (parameters: any, options: any, done: () => void) => void | Promise<any>;
-    subcommands?: { [command: string]: Command },
-}
+import { Command, Parameter } from "./definitions";
+import { parseOptions } from "./option-parser";
 
 export class CLI {
     private readonly commands: { [command: string]: Command } = {};
@@ -42,40 +27,7 @@ export class CLI {
      * @param commandPieces
      */
     private parseOptions(command: Command, commandPieces: string[]): { options: any, remainingPieces: string[] } | false {
-        const options: any = {};
-
-        if (!command.options) return options;
-
-        command.options.forEach(opt => {
-            if (typeof opt === "string") {
-                options[opt] = false;
-                return;
-            }
-            options[opt.option] = false;
-        })
-
-        let hadInvalidOption = false;
-        const foundOptions: string[] = []
-        commandPieces.forEach(piece => {
-            if (piece[0] === "@") {
-                const opt = piece.substring(1);
-
-                // Make sure the options is registered with the command before we set it
-                if (options[opt] === undefined) {
-                    hadInvalidOption = true;
-                }
-
-                options[opt] = true;
-                foundOptions.push(piece);
-            }
-        });
-
-        if (hadInvalidOption) return false;
-
-        // Remove options from the commandPieces
-        foundOptions.forEach(opt => commandPieces = commandPieces.splice(commandPieces.indexOf(opt)))
-
-        return { options, remainingPieces: commandPieces };
+        return parseOptions(command, commandPieces);
     }
 
     /**
@@ -112,6 +64,7 @@ export class CLI {
      * @param commandPieces
      */
     private parseParameters(command: Command, commandPieces: string[]): any | false {
+        if (!command.parameters && (commandPieces.length > 0)) return false;
         if (!command.parameters) return {};
         if (command.parameters.length !== commandPieces.length) return false;
         const params: any = {};
@@ -123,6 +76,7 @@ export class CLI {
 
             if (param.type === "number") {
                 params[param.label] = Number(commandPieces.shift());
+                return;
             }
 
             params[param.label] = Boolean(commandPieces.shift());
@@ -139,7 +93,7 @@ export class CLI {
         const params = this.parseParameters(command.command, options.remainingPieces);
         if (!params) return this.invalidCommand();
         return new Promise(resolve => {
-            const prom = command.command.action(params, options, resolve);
+            const prom = command.command.action(params, options.options, resolve);
             if (prom instanceof Promise) {
                 prom.then(resolve).catch(e => {
                     console.log(e);
