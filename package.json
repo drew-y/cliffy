@@ -21,5 +21,9 @@
   "devDependencies": {
     "@types/node": "^9.4.0",
     "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "columnify": "^1.5.4",
+    "indent": "0.0.2"
   }
 }

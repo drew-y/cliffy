@@ -3,7 +3,11 @@
 Cliffy is a simple, powerful utility for making interactive command line interfaces.
 Cliffy can be considered an alternative to vorpal.
 
+Cliffy is run as a REPL. This allows you to accept multiple commands
+with one running node process. Cliffy is NOT an argv parser.
+
 **Features**:
+- REPL Style interface
 - Simple API
 - Can parse negative numbers
 - Typed parameters
@@ -30,7 +34,7 @@ Available commands:
     say [options] <word>             Say a word
     run [options]                    Run somewhere
 
-$> run help
+$> help run
 
 Run somewhere
 
@@ -189,7 +193,7 @@ setDelimiter(delimiter: string)
 Show the CLI
 
 ```typescript
-show()
+cli.show()
 ```
 
 ### `cli.hide`
@@ -197,7 +201,7 @@ show()
 Hide the cli
 
 ```typescript
-hide()
+cli.hide()
 ```
 
 ### `Command`

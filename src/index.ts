@@ -3,6 +3,9 @@ import { ReadStream } from "fs";
 import { WriteStream } from "tty";
 import { Command, Parameter } from "./definitions";
 import { parseOptions } from "./option-parser";
+import { printCommandHelp, printOverviewHelp } from "./help-gen";
+
+const columnify = require("columnify");
 
 export class CLI {
     private readonly commands: { [command: string]: Command } = {};
@@ -86,6 +89,7 @@ export class CLI {
 
     private async executeCommand(commandStr: string) {
         const pieces = commandStr.split(" ");
+        if (pieces[0] === "help") return this.help(pieces.slice(1));
         const command = this.getCommand(pieces);
         if (!command) return this.invalidCommand();
         const options = this.parseOptions(command.command, command.remainingPieces);
@@ -105,7 +109,7 @@ export class CLI {
 
     private invalidCommand() {
         console.log(`Invalid Command`);
-        this.printHelp();
+        this.help([]);
     }
 
     private async prompt(): Promise<string> {
@@ -114,16 +118,23 @@ export class CLI {
         });
     }
 
+    private help(commandPieces: string[]): void {
+        if (commandPieces.length === 0) {
+            printOverviewHelp(this.commands);
+            return;
+        }
+
+        const commandOpts = this.getCommand(commandPieces);
+        if (!commandOpts) return this.help([]);
+        printCommandHelp(commandPieces.join(" "), commandOpts.command);
+    }
+
     setDelimiter(delimiter: string) {
         this.delimiter = delimiter;
     }
 
     command(command: string, opts: Command) {
         this.commands[command] = opts;
-    }
-
-    printHelp() {
-
     }
 
     async show() {
