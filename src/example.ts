@@ -2,6 +2,8 @@ import { CLI } from "./index";
 
 const cli = new CLI();
 
+cli.setDelimiter("example -> ")
+
 cli.command("hello", {
     action: (params, opts, done) => {
         console.log("Hello Back!");
@@ -10,6 +12,7 @@ cli.command("hello", {
 });
 
 cli.command("do", {
+    description: "Preform an action",
     action: (a, b, c) => c(),
     subcommands: {
         something: {

@@ -2,6 +2,13 @@ import { Command } from "./definitions";
 const indent = require("indent");
 const columnify = require("columnify");
 
+function columns(data: any) {
+    return indent(columnify(data, {
+        showHeaders: false,
+        minWidth: 30
+    }), 4);
+}
+
 function genUsage(command: string, val: Command) {
     let usage = `${command} [options]`;
     if (!val.parameters) return usage;
@@ -34,7 +41,7 @@ function printOptions(val: Command) {
             }
             options[`@${opt}`] = opt.description || "";
         });
-        console.log(indent(columnify(options, { showHeaders: false}), 4));
+        console.log(columns(options));
     }
 }
 
@@ -45,7 +52,7 @@ function printSubCommands(val: Command) {
         for (const command in val.subcommands) {
             commands[genUsage(command, val.subcommands[command])] = val.subcommands[command].description || "";
         }
-        console.log(indent(columnify(commands, { showHeaders: false }), 4));
+        console.log(columns(commands));
     }
 }
 
@@ -60,6 +67,6 @@ export function printOverviewHelp(commands: { [command: string]: Command }) {
     console.log(`Available commands:\n`);
     console.log(indent(`help <cmd>`, 4));
 
-    console.log(indent(columnify(commandDescriptions, { showHeaders: false }), 4) + "\n");
+    console.log(columns(commandDescriptions) + "\n");
     return;
 }
