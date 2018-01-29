@@ -142,6 +142,17 @@ Interface:
 command(command: string, opts: Command): void
 ```
 
+Each command much have an action. The action is a function with the
+following signature: `function action(params: any, options: any, done: () => void): Promise<void> | void`.
+
+The `params` parameter is an object with all the specified parameters attached. The key is the parameter
+label, and the value is the value given by the user.
+
+The `options` parameter is a object with all the registered options attached. The key is the
+option and the value is either true or false.
+
+To complete the action and continue the REPL you can either call done or return a promise.
+
 Usage:
 
 ```typescript
