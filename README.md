@@ -153,6 +153,8 @@ option and the value is either true or false.
 
 To complete the action and continue the REPL you can either call done or return a promise.
 
+For more on the commands object see the [Command Interface](#command).
+
 Usage:
 
 ```typescript
