@@ -1,6 +1,6 @@
 {
   "name": "cliffy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "types": "src",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/versabuilt/cliffy.git"
+    "url": "git+ssh://git@gitlab.com/youngwerth/cliffy.git"
   },
   "keywords": [],
   "author": "",
