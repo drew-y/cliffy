@@ -15,9 +15,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/versabuilt/cliffy/issues"
+    "url": "https://gitlab.com/youngwerth/cliffy/issues"
   },
-  "homepage": "https://gitlab.com/versabuilt/cliffy#README",
+  "homepage": "https://gitlab.com/youngwerth/cliffy#README",
   "devDependencies": {
     "@types/node": "^9.4.0",
     "typescript": "^2.6.2"
