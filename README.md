@@ -15,9 +15,11 @@ with one running node process. Cliffy is NOT an argv parser.
 - Options
 - Auto generated help
 
-**Gotchas**
+**Gotchas**:
 - Options are specified with an `@` symbol. Not `-` or `--`.
 This is what allows Cliffy to parse negatives.
+- Does not yet support optional parameters
+- Does not yet support rest parameters
 
 ## Example Cliffy CLI
 
