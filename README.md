@@ -13,6 +13,7 @@ with one running node process. Cliffy is NOT an argv parser.
 - Typed parameters
 - Git Style Sub-Commands
 - Options
+- Auto generated help
 
 **Gotchas**
 - Options are specified with an `@` symbol. Not `-` or `--`.
