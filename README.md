@@ -19,10 +19,19 @@ with one running node process. Cliffy is NOT an argv parser.
 **Gotchas**:
 - Options are specified with an `@` symbol. Not `-` or `--`.
 This is what allows Cliffy to parse negatives.
+- Requires node v6+
 - Does not yet support optional parameters
 - Does not yet support rest parameters
 
 ## Quickstart
+
+**Instalation**:
+
+```bash
+npm i cliffy # --save if using npm < v5
+```
+
+**Usage**
 
 ```typescript
 import { CLI } from "cliffy";
