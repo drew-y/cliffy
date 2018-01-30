@@ -129,14 +129,17 @@ export class CLI {
         printCommandHelp(commandPieces.join(" "), commandOpts.command);
     }
 
+    /** Set the cli delimiter */
     setDelimiter(delimiter: string) {
         this.delimiter = delimiter;
     }
 
+    /** Register a command */
     command(command: string, opts: Command) {
         this.commands[command] = opts;
     }
 
+    /** Show the CLI */
     async show() {
         this.isActive = true;
         while (this.isActive) {
@@ -145,6 +148,7 @@ export class CLI {
         }
     }
 
+    /** Hide the cli */
     hide() {
         this.isActive = false;
     }
