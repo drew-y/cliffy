@@ -16,9 +16,11 @@ with one running node process. Cliffy is NOT an argv parser.
 - Auto generated help
 - Typescript Support
 
-**Gotchas**
+**Gotchas**:
 - Options are specified with an `@` symbol. Not `-` or `--`.
 This is what allows Cliffy to parse negatives.
+- Does not yet support optional parameters
+- Does not yet support rest parameters
 
 ## Quickstart
 
