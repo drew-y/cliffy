@@ -25,7 +25,7 @@ This is what allows Cliffy to parse negatives.
 
 ## Quickstart
 
-**Instalation**:
+**Installation**:
 
 ```bash
 npm i cliffy # --save if using npm < v5
