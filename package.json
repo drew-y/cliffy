@@ -9,15 +9,15 @@
   "types": "src",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/youngwerth/cliffy.git"
+    "url": "git+ssh://git@github.com:drew-y/cliffy.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/youngwerth/cliffy/issues"
+    "url": "https://github.com/drew-y/cliffy/issues"
   },
-  "homepage": "https://gitlab.com/youngwerth/cliffy#README",
+  "homepage": "https://github.com/drew-y/cliffy#README",
   "devDependencies": {
     "@types/node": "^9.4.0",
     "typescript": "^2.6.2"
