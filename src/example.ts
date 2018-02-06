@@ -19,7 +19,7 @@ cli.command("hide", {
         }, 2000);
         return Promise.resolve();
     }
-})
+});
 
 cli.command("do", {
     description: "Preform an action",
@@ -47,4 +47,6 @@ cli.command("do", {
             }
         }
     }
-})
+});
+
+cli.show();

@@ -94,9 +94,9 @@ export class CLI {
         const command = this.getCommand(pieces);
         if (!command) return this.invalidCommand();
         const options = this.parseOptions(command.command, command.remainingPieces);
-        if (!options) return this.invalidCommand();
+        if (!options) return this.help(pieces);
         const params = this.parseParameters(command.command, options.remainingPieces);
-        if (!params) return this.invalidCommand();
+        if (!params) return this.help(pieces);
         return new Promise(resolve => {
             const prom = command.command.action(params, options.options, resolve);
             if (prom instanceof Promise) {
@@ -135,8 +135,13 @@ export class CLI {
         }
 
         const commandOpts = this.getCommand(commandPieces);
+
         if (!commandOpts) return this.help([]);
-        printCommandHelp(commandPieces.join(" "), commandOpts.command);
+
+        printCommandHelp(
+            commandPieces.slice(0, commandPieces.length - commandOpts.remainingPieces.length).join(" "),
+            commandOpts.command
+        );
     }
 
     /** Set the cli delimiter */
