@@ -20,6 +20,7 @@ export class CLI {
         const input = opts.input || process.stdin;
         const output = opts.output || process.stdout;
         this.readline = readline.createInterface(input, output);
+        this.readline.pause();
     }
 
     /**
@@ -118,6 +119,15 @@ export class CLI {
         });
     }
 
+    private startREPL() {
+        this.prompt()
+        .then(commandStr => this.executeCommand(commandStr))
+        .catch(e => console.log(e))
+        .then(() => {
+            if (this.isActive) this.startREPL();
+        });
+    }
+
     private help(commandPieces: string[]): void {
         if (commandPieces.length === 0) {
             printOverviewHelp(this.commands);
@@ -141,15 +151,14 @@ export class CLI {
 
     /** Show the CLI */
     async show() {
+        this.readline.resume();
         this.isActive = true;
-        while (this.isActive) {
-            const commandStr = await this.prompt();
-            await this.executeCommand(commandStr);
-        }
+        this.startREPL();
     }
 
     /** Hide the cli */
     hide() {
+        this.readline.pause();
         this.isActive = false;
     }
 }
