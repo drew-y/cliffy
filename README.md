@@ -263,3 +263,10 @@ This works with subcommands as well
 ```
 help git pull
 ```
+
+## Build instructions
+
+1. Clone this repo
+2. CD into the repo
+3. `npm install`
+4. `npm run build`

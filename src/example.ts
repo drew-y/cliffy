@@ -11,6 +11,16 @@ cli.command("hello", {
     }
 });
 
+cli.command("hide", {
+    action() {
+        cli.hide();
+        setTimeout(() => {
+            cli.show();
+        }, 2000);
+        return Promise.resolve();
+    }
+});
+
 cli.command("do", {
     description: "Preform an action",
     action: (a, b, c) => c(),
@@ -37,6 +47,6 @@ cli.command("do", {
             }
         }
     }
-})
+});
 
 cli.show();

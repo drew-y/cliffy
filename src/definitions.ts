@@ -35,3 +35,5 @@ export interface Command {
     /** Sub commands of the command. Follows the same interface as Command */
     subcommands?: { [command: string]: Command },
 }
+
+export interface Commands { [command: string]: Command };
