@@ -1,6 +1,6 @@
 {
   "name": "cliffy",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com:drew-y/cliffy.git"
   },
-  "keywords": [],
+  "keywords": ["cli", "command", "repl", "vorpal", "typescript"],
   "author": "",
   "license": "ISC",
   "bugs": {
