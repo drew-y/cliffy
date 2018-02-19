@@ -12,7 +12,13 @@
     "type": "git",
     "url": "git+ssh://git@github.com:drew-y/cliffy.git"
   },
-  "keywords": ["cli", "command", "repl", "vorpal", "typescript"],
+  "keywords": [
+    "cli",
+    "command",
+    "repl",
+    "vorpal",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
