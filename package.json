@@ -1,18 +1,24 @@
 {
   "name": "cliffy",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "types": "src",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:drew-y/cliffy.git"
   },
-  "keywords": ["cli", "command", "repl", "vorpal", "typescript"],
+  "keywords": [
+    "cli",
+    "command",
+    "repl",
+    "vorpal",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
