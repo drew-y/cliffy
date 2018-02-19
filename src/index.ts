@@ -1,13 +1,11 @@
 import readline = require("readline");
 import { ReadStream } from "fs";
 import { WriteStream } from "tty";
-import { Command, Parameter } from "./definitions";
+import { Command } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
-
-const columnify = require("columnify");
 
 export class CLI {
     private readonly commands: { [command: string]: Command } = {};
