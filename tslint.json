@@ -1,0 +1,19 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "linebreak-style": [
+            true,
+            "CRLF"
+        ],
+        "interface-name": [true, "never-prefix"],
+        "member-ordering": false,
+        "no-console": false,
+        "ordered-imports": false,
+        "object-literal-sort-keys": false,
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "no-var-requires": false
+    }
+}

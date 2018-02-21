@@ -1,6 +1,5 @@
 import { Command } from "./definitions";
 
-
 /**
  * Get the parameters object from the remainingPieces of the command string.
  *
@@ -14,15 +13,15 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
     if (!command.parameters) return {};
     if (command.parameters.length !== commandPieces.length) return false;
     const params: any = {};
-    command.parameters.forEach(param => {
+    command.parameters.forEach((param) => {
         if (!param.type || param.type === "string") {
             params[param.label] = commandPieces.shift();
-            return;
+            return false;
         }
 
         if (param.type === "number") {
             params[param.label] = Number(commandPieces.shift());
-            return;
+            return false;
         }
 
         params[param.label] = Boolean(commandPieces.shift());

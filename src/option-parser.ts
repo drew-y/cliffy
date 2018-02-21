@@ -7,7 +7,8 @@ import { Command } from "./definitions";
  * Returns false if an invalid option was detected
  * @param commandPieces
  */
-export function parseOptions(command: Command, commandPieces: string[]): { options: any, remainingPieces: string[] } | false {
+export function parseOptions(command: Command,
+                             commandPieces: string[]): { options: any, remainingPieces: string[] } | false {
     const options: any = {};
 
     const { foundOptions, remainingPieces } = removeOptionsFromCommandPieces(commandPieces);
@@ -20,7 +21,7 @@ export function parseOptions(command: Command, commandPieces: string[]): { optio
 
     populateOptionsObject(command, options);
 
-    let hadInvalidOption = matchOptionsUsedInCommandStr(foundOptions, options);
+    const hadInvalidOption = matchOptionsUsedInCommandStr(foundOptions, options);
 
     if (hadInvalidOption) return false;
 
@@ -29,7 +30,7 @@ export function parseOptions(command: Command, commandPieces: string[]): { optio
 
 function matchOptionsUsedInCommandStr(foundOptions: string[], options: any) {
     let hadInvalidOption = false;
-    foundOptions.forEach(opt => {
+    foundOptions.forEach((opt) => {
         // Make sure the options is registered with the command before we set it
         if (options[opt] === undefined) {
             hadInvalidOption = true;
@@ -41,8 +42,8 @@ function matchOptionsUsedInCommandStr(foundOptions: string[], options: any) {
 }
 
 function populateOptionsObject(command: Command, options: any) {
-    if (!command.options) throw new Error("No options to populate")
-    command.options.forEach(opt => {
+    if (!command.options) throw new Error("No options to populate");
+    command.options.forEach((opt) => {
         if (typeof opt === "string") {
             options[opt] = false;
             return;
@@ -52,15 +53,15 @@ function populateOptionsObject(command: Command, options: any) {
 }
 
 function removeOptionsFromCommandPieces(commandPieces: string[]) {
-    let remainingPieces = commandPieces.slice();
+    const remainingPieces = commandPieces.slice();
     const foundOptions: string[] = [];
-    commandPieces.forEach(piece => {
+    commandPieces.forEach((piece) => {
         if (piece[0] === "@") {
             foundOptions.push(piece.substring(1));
         }
     });
     // Remove options from the commandPieces
-    foundOptions.forEach(opt => {
+    foundOptions.forEach((opt) => {
         const index = remainingPieces.indexOf(`@${opt}`);
         remainingPieces.splice(index, 1);
     });

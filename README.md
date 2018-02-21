@@ -31,62 +31,62 @@ This is what allows Cliffy to parse negatives.
 npm i cliffy # --save if using npm < v5
 ```
 
+or
+
+```bash
+yarn add cliffy
+```
+
 **Usage**
 
 ```typescript
-import { CLI } from "cliffy";
+import { CLI } from 'cliffy';
+const { log } = console;
 
-const cli = new CLI();
-
-cli.setDelimiter("run command ->");
-
-cli.command("say", {
-    description: "Say a word",
-    options: ["reversed"],
-    parameters: [{ label: "word", type: "string" }],
-    action: (params, options, done) => {
-        if (options.reversed) {
-            console.log(params.word.split("").reverse().join());
-        } else {
-            console.log(params.word)
-        }
-        done()
-    }
-});
-
-cli.command("run", {
-    description: "Run somewhere",
-    options: [
-        { option: "fast", description: "Run fast" },
-        { option: "medium", description: "Run medium fast" },
-        { option: "slow", description: "Run slow" }
-    ],
-    parameters: [{ label: "destination" }],
-    action: (params, options, done) => {
-        console.log(`I ran to ${params.destination}`);
-        done();
-    },
-    subcommands: {
-        to: {
-            description: "Run to a destination",
-            parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
+const cli = new CLI()
+    .setDelimiter("example -> ")
+    .addExitCommand()
+    .addCommand("hello", {
+        action(parameters, options) {
+            log("Hello Back!");
+        },
+    })
+    .addCommand("hide", {
+        action(parameters, options) {
+            cli.hide();
+            setTimeout(() => {
+                cli.show();
+            }, 2000);
+            return Promise.resolve();
+        },
+    })
+    .addCommand("do", {
+        description: "Preform an action",
+        action: (parameters, options) => null,
+        subcommands: {
+            something: {
+                options: [
+                    "joint",
+                    "hi",
+                ],
+                parameters: [
+                    { label: "num", type: "number" },
+                ],
+                action(parameters, options) {
+                    log("I Did Something!");
+                    log(parameters.rer);
+                    log(options);
+                },
             },
-        }
-        from: {
-            description: "Run from a destination",
-            parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
+            nothing: {
+                action(parameters, options) {
+                    log("I Did Nothing!");
+                },
             },
-        }
-    }
-});
+        },
+    })
+    .show();
 
-cli.show();
 ```
 
 Result:
@@ -145,7 +145,7 @@ Usage:
 const cli = new CLI(opts)
 ```
 
-### `cli.command(name: string, opts: Command): void`
+### `cli.addCommand(name: string, opts: Command): void`
 
 Register a command
 
@@ -155,7 +155,7 @@ The command name is what the user will enter to execute the command.
 
 The command opts follows the following interface:
 ```typescript
-interface Command {
+export interface Command {
     /**
      * Required action function. Executed when the user enters the command.
      *
@@ -169,35 +169,39 @@ interface Command {
      * As an alternative to calling done, the action may also return a Promise which ends the
      * action when resolved.
      */
-    action: (parameters: any, options: any, done: () => void) => void | Promise<any>;
+    action: (parameters: ActionData, options: ActionData, done: () => void) => void | Promise<any> | null;
 
     /** Optional description for documentation */
     description?: string;
 
     /** An array of options available to the user. The user specifies an option with an @ symbol i.e. @force */
-    options?: ({
+    options?: Array<{
         option: string;
         description?: string;
-    } | string)[];
+    } | string>;
 
     /** All the parameters available to the user. See the parameters interface */
-    parameters?: Parameter[],
+    parameters?: Parameter[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: { [command: string]: Command },
+    subcommands?: { [command: string]: Command };
 }
 
-interface Parameter {
+export interface Parameter {
     label: string;
     type?: "boolean" | "number" | "string";
     description?: string;
+}
+
+export interface ActionData {
+    [parametr: string]: boolean | number | string;
 }
 ```
 
 Example Usage:
 
 ```typescript
-cli.command("run", {
+cli.addCommand("run", {
     description: "Run somewhere",
     options: [
         { option: "fast", description: "Run fast" },
@@ -233,6 +237,10 @@ cli.command("run", {
 ### `cli.setDelimiter(delimiter: string)`
 
 Set the CLI delimiter
+
+### `cli.getDelimiter()`
+
+Get the current CLI delimiter
 
 ### `cli.show()`
 
@@ -270,3 +278,7 @@ help git pull
 2. CD into the repo
 3. `npm install`
 4. `npm run build`
+
+## Build and run tests
+1. Follow build instructions
+2. `npm run test`

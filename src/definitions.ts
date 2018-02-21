@@ -4,6 +4,10 @@ export interface Parameter {
     description?: string;
 }
 
+export interface ActionData {
+    [parametr: string]: boolean | number | string;
+}
+
 export interface Command {
     /**
      * Required action function. Executed when the user enters the command.
@@ -18,22 +22,22 @@ export interface Command {
      * As an alternative to calling done, the action may also return a Promise which ends the
      * action when resolved.
      */
-    action: (parameters: any, options: any, done: () => void) => void | Promise<any>;
+    action: (parameters: ActionData, options: ActionData, done: () => void) => void | Promise<any> | null;
 
     /** Optional description for documentation */
     description?: string;
 
     /** An array of options available to the user. The user specifies an option with an @ symbol i.e. @force */
-    options?: ({
+    options?: Array<{
         option: string;
         description?: string;
-    } | string)[];
+    } | string>;
 
     /** All the parameters available to the user. See the parameters interface */
-    parameters?: Parameter[],
+    parameters?: Parameter[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: { [command: string]: Command },
+    subcommands?: { [command: string]: Command };
 }
 
-export interface Commands { [command: string]: Command };
+export interface Commands { [command: string]: Command; }
