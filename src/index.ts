@@ -7,6 +7,8 @@ import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
 
+export { Command } from "./definitions";
+
 export class CLI {
     private readonly commands: { [command: string]: Command } = {};
     private readonly readline: readline.ReadLine;
@@ -37,7 +39,7 @@ export class CLI {
             if (prom instanceof Promise) {
                 prom.then(resolve).catch(e => {
                     console.log(e);
-                    resolve()
+                    resolve();
                 });
             }
         });
