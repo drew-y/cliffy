@@ -22,5 +22,5 @@ export function parseCommand(promptResponse: string[], commands: Commands): (
 
    return {
        command, remainingPieces: promptResponse.slice(1)
-   }
+   };
 }

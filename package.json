@@ -1,6 +1,6 @@
 {
   "name": "cliffy",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -27,7 +27,8 @@
   "homepage": "https://github.com/drew-y/cliffy#README",
   "devDependencies": {
     "@types/node": "^9.4.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "tslint": "^5.9.1"
   },
   "dependencies": {
     "columnify": "^1.5.4",

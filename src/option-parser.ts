@@ -1,5 +1,7 @@
 import { Command } from "./definitions";
 
+export type ParsedOptions = { options: any, remainingPieces: string[] };
+
 /**
  * Returns an object with any options that were in the command set to true,
  * all others set to false.
@@ -7,7 +9,7 @@ import { Command } from "./definitions";
  * Returns false if an invalid option was detected
  * @param commandPieces
  */
-export function parseOptions(command: Command, commandPieces: string[]): { options: any, remainingPieces: string[] } | false {
+export function parseOptions(command: Command, commandPieces: string[]): ParsedOptions | false {
     const options: any = {};
 
     const { foundOptions, remainingPieces } = removeOptionsFromCommandPieces(commandPieces);
@@ -20,7 +22,7 @@ export function parseOptions(command: Command, commandPieces: string[]): { optio
 
     populateOptionsObject(command, options);
 
-    let hadInvalidOption = matchOptionsUsedInCommandStr(foundOptions, options);
+    const hadInvalidOption = matchOptionsUsedInCommandStr(foundOptions, options);
 
     if (hadInvalidOption) return false;
 
@@ -41,7 +43,7 @@ function matchOptionsUsedInCommandStr(foundOptions: string[], options: any) {
 }
 
 function populateOptionsObject(command: Command, options: any) {
-    if (!command.options) throw new Error("No options to populate")
+    if (!command.options) throw new Error("No options to populate");
     command.options.forEach(opt => {
         if (typeof opt === "string") {
             options[opt] = false;
@@ -52,7 +54,7 @@ function populateOptionsObject(command: Command, options: any) {
 }
 
 function removeOptionsFromCommandPieces(commandPieces: string[]) {
-    let remainingPieces = commandPieces.slice();
+    const remainingPieces = commandPieces.slice();
     const foundOptions: string[] = [];
     commandPieces.forEach(piece => {
         if (piece[0] === "@") {

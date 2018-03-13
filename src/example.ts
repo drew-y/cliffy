@@ -2,7 +2,7 @@ import { CLI } from "./index";
 
 const cli = new CLI();
 
-cli.setDelimiter("example -> ")
+cli.setDelimiter("example -> ");
 
 cli.command("hello", {
     action: (params, opts, done) => {
