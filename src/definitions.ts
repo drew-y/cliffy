@@ -30,10 +30,10 @@ export interface Command {
     } | string)[];
 
     /** All the parameters available to the user. See the parameters interface */
-    parameters?: Parameter[],
+    parameters?: Parameter[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: { [command: string]: Command },
+    subcommands?: { [command: string]: Command };
 }
 
-export interface Commands { [command: string]: Command };
+export interface Commands { [command: string]: Command; }
