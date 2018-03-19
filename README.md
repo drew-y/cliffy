@@ -234,6 +234,29 @@ cli.command("run", {
 
 Set the CLI delimiter
 
+Defaults to: `"$>"`
+
+### `cli.setInfo(info: string)`
+
+Set the CLI info.
+
+Info is meant to give an overview of what the CLI does and how to use it.
+If it is set it is shown directly under the CLI name.
+
+Defaults to: `none`
+
+### `cli.setName(name: string)`
+
+Set the name of the CLI (Shown at the top of the help menu)
+
+Defaults to: `none`
+
+### `cli.setVersion(version: string)`
+
+Set the CLI version. Shown beside the CLI name if set.
+
+Defaults to: `none`
+
 ### `cli.show()`
 
 Show the CLI
