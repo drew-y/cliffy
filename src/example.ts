@@ -2,6 +2,9 @@ import { CLI } from "./index";
 
 const cli = new CLI();
 
+cli.setName("Cliffy Example CLI");
+cli.setVersion(require(`${__dirname}/../package.json`).version);
+cli.setInfo("This is an example CLI. Made with Cliffy");
 cli.setDelimiter("example -> ");
 
 cli.command("hello", {

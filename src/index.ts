@@ -14,6 +14,9 @@ export class CLI {
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
+    private name?: string;
+    private info?: string;
+    private version?: string;
 
     constructor(opts: {
         input?: ReadStream,
@@ -67,7 +70,9 @@ export class CLI {
 
     private help(commandPieces: string[]): void {
         if (commandPieces.length === 0) {
-            printOverviewHelp(this.commands);
+            printOverviewHelp({
+                info: this.info, name: this.name, version: this.version, commands: this.commands
+            });
             return;
         }
 
@@ -102,5 +107,17 @@ export class CLI {
     hide() {
         this.readline.pause();
         this.isActive = false;
+    }
+
+    setVersion(val: string) {
+        this.version = val;
+    }
+
+    setInfo(val: string) {
+        this.info = val;
+    }
+
+    setName(val: string) {
+        this.name = val;
     }
 }

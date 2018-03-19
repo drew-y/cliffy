@@ -13,7 +13,7 @@ function genUsage(command: string, val: Command) {
     let usage = `${command} [options]`;
     if (!val.parameters) return usage;
     for (const param of val.parameters) {
-        usage += ` <${param.label}>`
+        usage += ` <${param.label}>`;
     }
     return usage;
 }
@@ -21,10 +21,10 @@ function genUsage(command: string, val: Command) {
 export function printCommandHelp(command: string, val: Command) {
     console.log("");
     if (val.description) {
-        console.log(val.description + "\n");
+        console.log(`${val.description}\n`);
     }
     console.log(`Usage:\n`);
-    console.log(indent(genUsage(command, val), 4) + "\n");
+    console.log(`${indent(genUsage(command, val), 4)}\n`);
     printOptions(val);
     printSubCommands(val);
     console.log("");
@@ -56,17 +56,32 @@ function printSubCommands(val: Command) {
     }
 }
 
-export function printOverviewHelp(commands: { [command: string]: Command }) {
+export function printOverviewHelp(opts: {
+    name?: string;
+    info?: string;
+    version?: string;
+    commands: { [command: string]: Command }
+}) {
+    const { name, info, commands, version } = opts;
+
     const commandDescriptions: any = {};
     for (const command in commands) {
         commandDescriptions[genUsage(command, commands[command])] = commands[command].description || "";
     }
-    console.log(`\nUsage:\n`)
+
+    if (name) {
+        const title = `${name} ${version ? `- ${version}` : ""}`;
+        console.log(`\n${title}`);
+    }
+
+    if (info) console.log(`\n${info}`);
+
+    console.log(`\nUsage:\n`);
     console.log(indent(`<cmd>\n`, 4));
 
     console.log(`Available commands:\n`);
     console.log(indent(`help <cmd>`, 4));
 
-    console.log(columns(commandDescriptions) + "\n");
+    console.log(`${columns(commandDescriptions)}\n`);
     return;
 }
