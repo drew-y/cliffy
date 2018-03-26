@@ -230,6 +230,37 @@ cli.command("run", {
 });
 ```
 
+### `cli.registerCommands(commands: { [name: string]: Command })`
+
+Register multiple commands at once.
+
+Example usage:
+
+```typescript
+cli.registerCommands({
+    run: {
+        action(params, options, done) {
+            console.log("Running");
+            done();
+        }
+    },
+
+    jog: {
+        action(params, options, done) {
+            console.log("Jogging");
+            done();
+        }
+    },
+
+    walk: {
+        action(params, options, done) {
+            console.log("Walking");
+            done();
+        }
+    }
+});
+```
+
 ### `cli.setDelimiter(delimiter: string)`
 
 Set the CLI delimiter

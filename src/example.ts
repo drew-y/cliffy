@@ -52,4 +52,27 @@ cli.command("do", {
     }
 });
 
+cli.registerCommands({
+    run: {
+        action(params, options, done) {
+            console.log("Running");
+            done();
+        }
+    },
+
+    jog: {
+        action(params, options, done) {
+            console.log("Jogging");
+            done();
+        }
+    },
+
+    walk: {
+        action(params, options, done) {
+            console.log("Walking");
+            done();
+        }
+    }
+});
+
 cli.show();

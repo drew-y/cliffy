@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+ssh://git@github.com:drew-y/cliffy.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [
     "cli",
     "command",
