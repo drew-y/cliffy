@@ -1,13 +1,13 @@
 import readline = require("readline");
 import { ReadStream } from "fs";
 import { WriteStream } from "tty";
-import { Command } from "./definitions";
+import { Command, Commands } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
 
-export { Command } from "./definitions";
+export { Command, Commands } from "./definitions";
 
 export class CLI {
     private readonly commands: { [command: string]: Command } = {};
@@ -94,6 +94,13 @@ export class CLI {
     /** Register a command */
     command(command: string, opts: Command) {
         this.commands[command] = opts;
+    }
+
+    /** Register multiple commands at once */
+    registerCommands(commands: Commands) {
+        for (const command in commands) {
+            this.command(command, commands[command]);
+        }
     }
 
     /** Show the CLI */
