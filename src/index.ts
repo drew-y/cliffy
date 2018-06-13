@@ -10,7 +10,7 @@ import { parseParameters } from "./parameter-parser";
 export { Command, Commands } from "./definitions";
 
 export class CLI {
-    private readonly commands: { [command: string]: Command } = {};
+    private readonly cmdRegistry: { [command: string]: Command } = {};
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
@@ -31,7 +31,7 @@ export class CLI {
     private async executeCommand(commandStr: string) {
         const pieces = commandStr.split(" ");
         if (pieces[0] === "help") return this.help(pieces.slice(1));
-        const command = parseCommand(pieces, this.commands);
+        const command = parseCommand(pieces, this.cmdRegistry);
         if (!command) return this.invalidCommand();
         const options = parseOptions(command.command, command.remainingPieces);
         if (!options) return this.help(pieces);
@@ -71,12 +71,12 @@ export class CLI {
     private help(commandPieces: string[]): void {
         if (commandPieces.length === 0) {
             printOverviewHelp({
-                info: this.info, name: this.name, version: this.version, commands: this.commands
+                info: this.info, name: this.name, version: this.version, commands: this.cmdRegistry
             });
             return;
         }
 
-        const commandOpts = parseCommand(commandPieces, this.commands);
+        const commandOpts = parseCommand(commandPieces, this.cmdRegistry);
 
         if (!commandOpts) return this.help([]);
 
@@ -93,7 +93,12 @@ export class CLI {
 
     /** Register a command */
     command(command: string, opts: Command) {
-        this.commands[command] = opts;
+        this.cmdRegistry[command] = opts;
+    }
+
+    /** Register multiple commands at once (Alias for registerCommands) */
+    commands(commands: Commands) {
+        this.registerCommands(commands);
     }
 
     /** Register multiple commands at once */
