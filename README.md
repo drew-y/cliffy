@@ -50,7 +50,7 @@ cli.command("say", {
         } else {
             console.log(params.word)
         }
-        done()
+        done();
     }
 });
 
