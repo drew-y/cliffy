@@ -50,7 +50,7 @@ cli.command("say", {
         } else {
             console.log(params.word)
         }
-        done()
+        done();
     }
 });
 
@@ -189,7 +189,8 @@ interface Command {
 
 interface Parameter {
     label: string;
-    type?: "boolean" | "number" | "string";
+    /** The type to convert the provided value to. Can be a custom converter. */
+    type?: "boolean" | "number" | "string" | ((val: string) => any);
     description?: string;
 }
 ```
