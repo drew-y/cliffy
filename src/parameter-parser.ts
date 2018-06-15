@@ -1,5 +1,11 @@
-import { Command } from "./definitions";
+import { Command, Parameter } from "./definitions";
 
+function convertToType(param: Parameter, passedVal: string): any {
+    if (!param.type || param.type === "string") return passedVal;
+    if (param.type === "number") return Number(passedVal);
+    if (param.type instanceof Function) return param.type(passedVal);
+    return Boolean(passedVal);
+}
 
 /**
  * Get the parameters object from the remainingPieces of the command string.
@@ -15,17 +21,7 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
     if (command.parameters.length !== commandPieces.length) return false;
     const params: any = {};
     command.parameters.forEach(param => {
-        if (!param.type || param.type === "string") {
-            params[param.label] = commandPieces.shift();
-            return;
-        }
-
-        if (param.type === "number") {
-            params[param.label] = Number(commandPieces.shift());
-            return;
-        }
-
-        params[param.label] = Boolean(commandPieces.shift());
+        params[param.label] = convertToType(param, commandPieces.shift()!)
     });
     return params;
 }
