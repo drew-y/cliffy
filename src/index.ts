@@ -5,7 +5,7 @@ import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
 
-export { Command, Commands } from "./definitions";
+export * from "./definitions";
 
 export class CLI {
     private readonly cmdRegistry: { [command: string]: Command } = {};
