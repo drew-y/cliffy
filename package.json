@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "cd dist && mocha",
+    "test": "tsc && cd dist && mocha",
     "build": "tsc"
   },
   "types": "dist/index.d.ts",
@@ -30,13 +30,12 @@
   "homepage": "https://github.com/drew-y/cliffy#README",
   "devDependencies": {
     "@types/mocha": "^5.2.2",
-    "@types/node": "^9.4.0",
     "mocha": "^5.2.0",
-    "stdio-mock": "^1.1.0",
     "tslint": "^5.9.1",
     "typescript": "^2.9.2"
   },
   "dependencies": {
+    "@types/node": "^6.0.0",
     "columnify": "^1.5.4",
     "indent": "0.0.2"
   }
