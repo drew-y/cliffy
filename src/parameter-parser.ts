@@ -4,7 +4,7 @@ function convertToType(param: Parameter, passedVal: string): any {
     if (!param.type || param.type === "string") return passedVal;
     if (param.type === "number") return Number(passedVal);
     if (param.type instanceof Function) return param.type(passedVal);
-    return Boolean(passedVal);
+    return passedVal !== "false" && passedVal !== "False" && passedVal !== "0";
 }
 
 /**
