@@ -21,7 +21,7 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
     if (command.parameters.length !== commandPieces.length) return false;
     const params: any = {};
     command.parameters.forEach(param => {
-        params[param.label] = convertToType(param, commandPieces.shift()!)
+        params[param.label] = convertToType(param, commandPieces.shift()!);
     });
     return params;
 }
