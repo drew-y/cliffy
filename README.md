@@ -189,7 +189,11 @@ interface Command {
 
 interface Parameter {
     label: string;
-    /** The type to convert the provided value to. Can be a custom converter. */
+    /**
+     * The type to convert the provided value to. Can be a custom converter.
+     * When boolean is specified the param is considered true unless "False" or
+     * "false" is passed
+     */
     type?: "boolean" | "number" | "string" | ((val: string) => any);
     description?: string;
 }

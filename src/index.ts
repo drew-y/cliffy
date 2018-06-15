@@ -132,4 +132,8 @@ export class CLI {
     setName(val: string) {
         this.name = val;
     }
+
+    hasCommand(cmd: string): boolean {
+        return !!this.cmdRegistry[cmd];
+    }
 }
