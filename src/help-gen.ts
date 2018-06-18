@@ -1,4 +1,4 @@
-import { Command } from "./definitions";
+import { StrictCommand } from "./definitions";
 const indent = require("indent");
 const columnify = require("columnify");
 
@@ -9,7 +9,7 @@ function columns(data: any) {
     }), 4);
 }
 
-function genUsage(command: string, val: Command) {
+function genUsage(command: string, val: StrictCommand) {
     let usage = `${command} [options]`;
     if (!val.parameters) return usage;
     for (const param of val.parameters) {
@@ -18,7 +18,7 @@ function genUsage(command: string, val: Command) {
     return usage;
 }
 
-export function printCommandHelp(command: string, val: Command) {
+export function printCommandHelp(command: string, val: StrictCommand) {
     console.log("");
     if (val.description) {
         console.log(`${val.description}\n`);
@@ -30,7 +30,7 @@ export function printCommandHelp(command: string, val: Command) {
     console.log("");
 }
 
-function printOptions(val: Command) {
+function printOptions(val: StrictCommand) {
     if (val.options && val.options.length > 0) {
         console.log(`Options:\n`);
         const options: any = {};
@@ -45,7 +45,7 @@ function printOptions(val: Command) {
     }
 }
 
-function printSubCommands(val: Command) {
+function printSubCommands(val: StrictCommand) {
     if (val.subcommands) {
         console.log("Sub-Commands:\n");
         const commands: any = {};
@@ -60,7 +60,7 @@ export function printOverviewHelp(opts: {
     name?: string;
     info?: string;
     version?: string;
-    commands: { [command: string]: Command }
+    commands: { [command: string]: StrictCommand }
 }) {
     const { name, info, commands, version } = opts;
 
