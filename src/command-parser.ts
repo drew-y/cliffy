@@ -1,4 +1,4 @@
-import { Command, Commands } from "./definitions";
+import { Command, StrictCommands } from "./definitions";
 
 
 /**
@@ -6,7 +6,7 @@ import { Command, Commands } from "./definitions";
  * Returns false if the command string did not have a valid command;
  * @param promptResponse
  */
-export function parseCommand(promptResponse: string[], commands: Commands): (
+export function parseCommand(promptResponse: string[], commands: StrictCommands): (
     { command: Command, remainingPieces: string[] } | false
 ) {
    const command = commands[promptResponse[0]];
@@ -15,12 +15,8 @@ export function parseCommand(promptResponse: string[], commands: Commands): (
 
    if (command.subcommands) {
        const subcommand = parseCommand(promptResponse.slice(1), command.subcommands);
-       if (subcommand) {
-           return subcommand;
-       }
+       if (subcommand) return subcommand;
    }
 
-   return {
-       command, remainingPieces: promptResponse.slice(1)
-   };
+   return { command, remainingPieces: promptResponse.slice(1) };
 }
