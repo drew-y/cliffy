@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "tsc && cd dist && mocha",
+    "prepublishOnly": "npm test",
     "build": "tsc"
   },
   "types": "dist/index.d.ts",
