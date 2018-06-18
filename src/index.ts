@@ -4,6 +4,7 @@ import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
+import { commandToStrictCommand } from "./helpers";
 
 export * from "./definitions";
 
@@ -91,12 +92,7 @@ export class CLI {
 
     /** Register a command */
     command(command: string, opts: Command | Action) {
-        if (opts instanceof Function) {
-            this.cmdRegistry[command] = { action: opts };
-            return;
-        }
-
-        this.cmdRegistry[command] = opts;
+        this.cmdRegistry[command] = commandToStrictCommand(opts);
     }
 
     /** Register multiple commands at once (Alias for registerCommands) */

@@ -1,4 +1,4 @@
-import { Command, StrictCommands } from "./definitions";
+import { StrictCommands, StrictCommand } from "./definitions";
 
 
 /**
@@ -7,7 +7,7 @@ import { Command, StrictCommands } from "./definitions";
  * @param promptResponse
  */
 export function parseCommand(promptResponse: string[], commands: StrictCommands): (
-    { command: Command, remainingPieces: string[] } | false
+    { command: StrictCommand, remainingPieces: string[] } | false
 ) {
    const command = commands[promptResponse[0]];
 

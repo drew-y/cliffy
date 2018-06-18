@@ -22,7 +22,7 @@ export interface Parameter {
     description?: string;
 }
 
-export interface Command {
+interface BaseCommand<T extends Commands> {
     action: Action;
 
     /** Optional description for documentation */
@@ -38,8 +38,11 @@ export interface Command {
     parameters?: Parameter[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: { [command: string]: Command };
+    subcommands?: T;
 }
 
+export type Command = BaseCommand<Commands>;
 export interface Commands { [command: string]: Command | Action; }
-export interface StrictCommands { [command: string]: Command; }
+
+export type StrictCommand = BaseCommand<StrictCommands>;
+export interface StrictCommands { [command: string]: StrictCommand; }
