@@ -1,3 +1,20 @@
+/**
+ * Required action function. Executed when the user enters the command.
+ *
+ * parameters is a key value store. Where the key is the parameter label,
+ * and the value is the value entered by the user.
+ *
+ * options is a key value store. Key being the option, value being true if the user
+ * specified the option, false otherwise.
+ *
+ * done is a function to be called inside the action function when the function is complete.
+ * As an alternative to calling done, the action may also return a Promise which ends the
+ * action when resolved.
+ */
+export interface Action {
+    (parameters: any, options: any, done: () => void): void | Promise<any>;
+}
+
 export interface Parameter {
     label: string;
     /** The type to convert the provided value to. Can be a custom converter. */
@@ -6,20 +23,7 @@ export interface Parameter {
 }
 
 export interface Command {
-    /**
-     * Required action function. Executed when the user enters the command.
-     *
-     * parameters is a key value store. Where the key is the parameter label,
-     * and the value is the value entered by the user.
-     *
-     * options is a key value store. Key being the option, value being true if the user
-     * specified the option, false otherwise.
-     *
-     * done is a function to be called inside the action function when the function is complete.
-     * As an alternative to calling done, the action may also return a Promise which ends the
-     * action when resolved.
-     */
-    action: (parameters: any, options: any, done: () => void) => void | Promise<any>;
+    action: Action;
 
     /** Optional description for documentation */
     description?: string;
@@ -37,4 +41,5 @@ export interface Command {
     subcommands?: { [command: string]: Command };
 }
 
-export interface Commands { [command: string]: Command; }
+export interface Commands { [command: string]: Command | Action; }
+export interface StrictCommands { [command: string]: Command; }

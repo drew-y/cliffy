@@ -145,7 +145,7 @@ Usage:
 const cli = new CLI(opts)
 ```
 
-### `cli.command(name: string, opts: Command): void`
+### `cli.command(name: string, opts: Command | Action): void`
 
 Register a command
 
@@ -153,7 +153,7 @@ A command takes a name and an opts object.
 
 The command name is what the user will enter to execute the command.
 
-The command opts follows the following interface:
+The opts paramter interfaces are defined as follows:
 ```typescript
 interface Command {
     /**
@@ -168,8 +168,10 @@ interface Command {
      * done is a function to be called inside the action function when the function is complete.
      * As an alternative to calling done, the action may also return a Promise which ends the
      * action when resolved.
+     *
+     * See the action interface bellow.
      */
-    action: (parameters: any, options: any, done: () => void) => void | Promise<any>;
+    action: Action;
 
     /** Optional description for documentation */
     description?: string;
@@ -185,6 +187,10 @@ interface Command {
 
     /** Sub commands of the command. Follows the same interface as Command */
     subcommands?: { [command: string]: Command },
+}
+
+interface Action {
+    (parameters: any, options: any, done: () => void): void | Promise<any>;
 }
 
 interface Parameter {
@@ -235,7 +241,7 @@ cli.command("run", {
 });
 ```
 
-### `cli.commands(commands: { [name: string]: Command })`
+### `cli.commands(commands: { [name: string]: Command | Action })`
 
 Register multiple commands at once. Alias for cli.registerCommands
 
@@ -266,7 +272,7 @@ cli.commands({
 });
 ```
 
-### `cli.registerCommands(commands: { [name: string]: Command })`
+### `cli.registerCommands(commands: { [name: string]: Command | Action })`
 
 Register multiple commands at once.
 

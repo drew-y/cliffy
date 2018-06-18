@@ -1,5 +1,5 @@
 import readline = require("readline");
-import { Command, Commands } from "./definitions";
+import { Command, Commands, Action, StrictCommands } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
@@ -8,7 +8,7 @@ import { parseParameters } from "./parameter-parser";
 export * from "./definitions";
 
 export class CLI {
-    private readonly cmdRegistry: { [command: string]: Command } = {};
+    private readonly cmdRegistry: StrictCommands = {};
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
@@ -90,7 +90,12 @@ export class CLI {
     }
 
     /** Register a command */
-    command(command: string, opts: Command) {
+    command(command: string, opts: Command | Action) {
+        if (opts instanceof Function) {
+            this.cmdRegistry[command] = { action: opts };
+            return;
+        }
+
         this.cmdRegistry[command] = opts;
     }
 
