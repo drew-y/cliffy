@@ -1,13 +1,11 @@
 import readline = require("readline");
-import { ReadStream } from "fs";
-import { WriteStream } from "tty";
 import { Command, Commands } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { parseCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
 
-export { Command, Commands } from "./definitions";
+export * from "./definitions";
 
 export class CLI {
     private readonly cmdRegistry: { [command: string]: Command } = {};
@@ -19,8 +17,8 @@ export class CLI {
     private version?: string;
 
     constructor(opts: {
-        input?: ReadStream,
-        output?: WriteStream
+        input?: NodeJS.ReadableStream,
+        output?: NodeJS.WritableStream
     } = {}) {
         const input = opts.input || process.stdin;
         const output = opts.output || process.stdout;

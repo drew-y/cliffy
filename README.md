@@ -133,8 +133,8 @@ Interface:
 ```typescript
 class CLI {
     constructor(opts: {
-        input?: ReadStream,
-        output?: WriteStream
+        input?: NodeJS.ReadableStream,
+        output?: NodeJS.WritableStream
     } = {})
 }
 ```
