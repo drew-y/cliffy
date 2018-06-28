@@ -4,13 +4,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.0.6]
+## 1.8.0
+
+### Added
+
+- Shorthand "Action" as an overload
+
+## 1.7.0
+
+### Added
+
+- Shorthand command registration
+
+## 1.6.0
+
+### Added
+
+- Unit tests
+
+### Fixed
+
+- Passed values of "false" or "0" are considered false by boolean parameters
+
+## 1.5.0
+
+### Added
+
+- Parameters can specify a conversion method as a type
+
+## 1.4.0
+
+### Added
+
+- `commands` An alias for registerCommands
+
+## 1.3.0
+
+### Added
+
+- `registerCommands` for bulk registration of commands
+
+## 1.2.0
+
+### Added
+
+- `setInfo` Set the help menu overview
+- `setName` Set the name of the interface for the help menu
+- `setVersion` Set a version to be displayed by help
+
+## 1.1.0
+
+### Added
+
+- Importable Commands interface
+
+### Changed
+
+- Type definitions come from a generated .d.ts file
+
+## 1.0.6
 
 ### Added
 
 - Licesnse text
 
-## [1.0.5]
+## 1.0.5
 
 ### Fixed
 

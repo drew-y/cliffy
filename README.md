@@ -247,7 +247,7 @@ Register a basic command.
 
 This overload allows you to pass the action function directy.
 Useful for quick commands where parameters, options, and a
-description are not needed.
+description may not be needed.
 
 Example usage:
 
