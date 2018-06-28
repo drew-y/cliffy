@@ -145,7 +145,7 @@ Usage:
 const cli = new CLI(opts)
 ```
 
-### `cli.command(name: string, opts: Command | Action): void`
+### `cli.command(name: string, opts: Command): void`
 
 Register a command
 
@@ -239,6 +239,20 @@ cli.command("run", {
         }
     }
 });
+```
+
+### `cli.command(name: string, opts: Action): void`
+
+Register a basic command.
+
+This overload allows you to pass the action function directy.
+Useful for quick commands where parameters, options, and a
+description are not needed.
+
+Example usage:
+
+```typescript
+cli.command("speak", () => sayHello("World"));
 ```
 
 ### `cli.commands(commands: { [name: string]: Command | Action })`

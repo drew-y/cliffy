@@ -26,6 +26,14 @@ describe("CLI", function() {
         return prom;
     });
 
+    it("Should execute a shorthand command", function() {
+        const prom = new Promise(res => {
+            cli.command("test", res);
+        });
+        send("test");
+        return prom;
+    });
+
     it("Should execute a command", function() {
         const prom = new Promise(res => {
             cli.command("test", { action() { res(); } });
