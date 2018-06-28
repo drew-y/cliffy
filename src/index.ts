@@ -91,7 +91,10 @@ export class CLI {
     }
 
     /** Register a command */
-    command(command: string, opts: Command | Action) {
+    command(command: string, opts: Command): void;
+    command(command: string, action: Action): void;
+    command(command: string, opts: Command | Action): void;
+    command(command: string, opts: Command | Action): void {
         this.cmdRegistry[command] = commandToStrictCommand(opts);
     }
 
