@@ -8,7 +8,7 @@ import { parseParameters } from "./parameter-parser";
 export * from "./definitions";
 
 export class CLI {
-    private readonly cmdRegistry: Commands = {};
+    private readonly commands: Commands = {};
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
@@ -59,7 +59,7 @@ export class CLI {
 
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
-        const parsedCmd = findPromptedCommand(pieces, this.cmdRegistry);
+        const parsedCmd = findPromptedCommand(pieces, this.commands);
         if (!parsedCmd) return this.invalidCommand();
 
         const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);
@@ -92,12 +92,12 @@ export class CLI {
     private help(commandPieces: string[]): void {
         if (commandPieces.length === 0) {
             printOverviewHelp({
-                info: this.info, name: this.name, version: this.version, commands: this.cmdRegistry
+                info: this.info, name: this.name, version: this.version, commands: this.commands
             });
             return;
         }
 
-        const commandOpts = findPromptedCommand(commandPieces, this.cmdRegistry);
+        const commandOpts = findPromptedCommand(commandPieces, this.commands);
 
         if (!commandOpts) return this.help([]);
 
@@ -108,52 +108,65 @@ export class CLI {
     }
 
     /** Set the cli delimiter */
-    setDelimiter(delimiter: string) {
+    setDelimiter(delimiter: string): this {
         this.delimiter = delimiter;
+        return this;
     }
 
     /** Register a command */
-    command(command: string, opts: Command): void;
-    command(command: string, action: Action): void;
-    command(command: string, opts: Command | Action): void;
-    command(command: string, opts: Command | Action): void {
-        this.cmdRegistry[command] = opts;
+    addCommand(command: string, opts: Command): this;
+    addCommand(command: string, action: Action): this;
+    addCommand(command: string, opts: Command | Action): this;
+    addCommand(command: string, opts: Command | Action): this {
+        this.commands[command] = opts;
+        return this;
     }
 
     /** Register multiple commands at once (Alias for registerCommands) */
-    commands(commands: Commands) {
+    addCommands(commands: Commands): this {
         for (const command in commands) {
             this.checkCommandForErrors(commands[command]);
-            this.command(command, commands[command]);
+            this.addCommand(command, commands[command]);
         }
+        return this;
+    }
+
+    removeCommand(command: string): this {
+        delete this.commands[command];
+        return this;
     }
 
     /** Show the CLI */
-    start() {
+    start(): this {
         this.readline.resume();
         this.isActive = true;
         this.startREPL();
+        return this;
     }
 
     /** Hide the cli */
-    stop() {
+    stop(): this {
         this.readline.pause();
         this.isActive = false;
+        return this;
     }
 
-    setVersion(val: string) {
+    setVersion(val: string): this {
         this.version = val;
+        return this;
     }
 
-    setInfo(val: string) {
+    setInfo(val: string): this {
         this.info = val;
+        return this;
     }
 
-    setName(val: string) {
+    setName(val: string): this {
         this.name = val;
+        return this;
     }
 
     hasCommand(cmd: string): boolean {
-        return !!this.cmdRegistry[cmd];
+        return !!this.commands[cmd];
     }
 }
