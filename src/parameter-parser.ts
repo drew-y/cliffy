@@ -19,9 +19,17 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
     if (!command.parameters && (commandPieces.length > 0)) return false;
     if (!command.parameters) return {};
     if (command.parameters.length !== commandPieces.length) return false;
+
     const params: any = {};
+
     command.parameters.forEach(param => {
+        if (typeof param === "string") {
+            params[param] = commandPieces.shift();
+            return;
+        }
+
         params[param.label] = convertToType(param, commandPieces.shift()!);
     });
+
     return params;
 }
