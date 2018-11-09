@@ -26,24 +26,21 @@ export class CLI {
         this.readline.pause();
     }
 
-    private async executeCommand(commandStr: string) {
-        const pieces = commandStr.split(" ");
+    private async executeCommand(input: string): Promise<void> {
+        const pieces = input.split(" ");
+
         if (pieces[0] === "help") return this.help(pieces.slice(1));
+
         const parsedCmd = findPromptedCommand(pieces, this.cmdRegistry);
         if (!parsedCmd) return this.invalidCommand();
+
         const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);
         if (!options) return this.help(pieces);
+
         const params = parseParameters(parsedCmd.command, options.remainingPieces);
         if (!params) return this.help(pieces);
-        return new Promise(resolve => {
-            const prom = parsedCmd.command.action(params, options.options);
-            if (prom instanceof Promise) {
-                prom.then(resolve).catch(e => {
-                    console.log(e);
-                    resolve();
-                });
-            }
-        });
+
+        return parsedCmd.command.action(params, options.options);
     }
 
     private invalidCommand() {
@@ -57,13 +54,11 @@ export class CLI {
         });
     }
 
-    private startREPL() {
-        this.prompt()
-        .then(commandStr => this.executeCommand(commandStr))
-        .catch(e => console.log(e))
-        .then(() => {
-            if (this.isActive) this.startREPL();
-        });
+    private async startREPL() {
+        while (this.isActive) {
+            const input = await this.prompt();
+            await this.executeCommand(input).catch(e => console.log(e));
+        }
     }
 
     private help(commandPieces: string[]): void {
