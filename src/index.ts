@@ -27,7 +27,8 @@ export class CLI {
     }
 
     private paramIsRequired(param: Parameter | string) {
-        return typeof param === "string" || !param.optional || !param.rest;
+        if (typeof param === "string") return true;
+        return !param.optional && !param.rest;
     }
 
     private isRestParameter(param: Parameter | string) {
@@ -118,6 +119,7 @@ export class CLI {
     addCommand(command: string, action: Action): this;
     addCommand(command: string, opts: Command | Action): this;
     addCommand(command: string, opts: Command | Action): this {
+        this.checkCommandForErrors(opts);
         this.commands[command] = opts;
         return this;
     }
@@ -125,7 +127,6 @@ export class CLI {
     /** Register multiple commands at once (Alias for registerCommands) */
     addCommands(commands: Commands): this {
         for (const command in commands) {
-            this.checkCommandForErrors(commands[command]);
             this.addCommand(command, commands[command]);
         }
         return this;
