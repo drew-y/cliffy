@@ -115,12 +115,12 @@ export class CLI {
     }
 
     /** Register a command */
-    addCommand(command: string, opts: Command): this;
-    addCommand(command: string, action: Action): this;
-    addCommand(command: string, opts: Command | Action): this;
-    addCommand(command: string, opts: Command | Action): this {
-        this.checkCommandForErrors(opts);
-        this.cmds[command] = opts;
+    addCommand(name: string, command: Command): this;
+    addCommand(name: string, action: Action): this;
+    addCommand(name: string, command: Command | Action): this;
+    addCommand(name: string, command: Command | Action): this {
+        this.checkCommandForErrors(command);
+        this.cmds[name] = command;
         return this;
     }
 
@@ -176,9 +176,9 @@ export class CLI {
      *
      * @deprecated - Use addCommand instead.
      */
-    command(command: string, opts: Command | Action): this {
+    command(name: string, opts: Command | Action): this {
         console.warn("command is deprecated - use addCommand instead");
-        return this.addCommand(command, opts);
+        return this.addCommand(name, opts);
     }
 
     /**
@@ -186,9 +186,9 @@ export class CLI {
      *
      * @deprecated - Use addCommands instead.
      **/
-    commands(commands: Commands): this {
+    commands(name: Commands): this {
         console.warn("commands is deprecated - use addCommands instead");
-        return this.addCommands(commands);
+        return this.addCommands(name);
     }
 
     /**
@@ -196,8 +196,8 @@ export class CLI {
      *
      * @deprecated - Use addCommands instead.
      **/
-    registerCommands(commands: Commands): this {
+    registerCommands(name: Commands): this {
         console.warn("registerCommands is deprecated - use addCommands instead");
-        return this.registerCommands(commands);
+        return this.registerCommands(name);
     }
 }
