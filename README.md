@@ -16,7 +16,7 @@ with one running node process. Cliffy is NOT an argv parser.
 - Can parse negative numbers
 - Typed parameters
 - Git Style Sub-Commands
-- Optianal parameters  (New in v2)
+- Optional parameters  (New in v2)
 - Rest parameters (New in v2)
 - Options
 - Auto generated help
