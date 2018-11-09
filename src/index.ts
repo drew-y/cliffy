@@ -1,5 +1,5 @@
 import readline = require("readline");
-import { Command, Commands, Action } from "./definitions";
+import { Command, Commands, Action, Parameter } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { findPromptedCommand } from "./command-parser";
@@ -24,6 +24,34 @@ export class CLI {
         const output = opts.output || process.stdout;
         this.readline = readline.createInterface(input, output);
         this.readline.pause();
+    }
+
+    private paramIsRequired(param: Parameter | string) {
+        return typeof param === "string" || !param.isOptional || !param.isRest;
+    }
+
+    private isRestParameter(param: Parameter | string) {
+        return !(typeof param === "string") && param.isRest;
+    }
+
+    private checkCommandForErrors(command: Command | Action) {
+        if (command instanceof Function) return;
+        if (!command.parameters) return;
+
+        let hasHadOptional = false;
+        command.parameters.forEach((param, index, parameters) => {
+            const isRequired = this.paramIsRequired(param);
+
+            if (isRequired && hasHadOptional) {
+                throw new Error(`Invalid parameter order. Required parameter after optional.`);
+            }
+
+            if (!isRequired) hasHadOptional = true;
+
+            if (this.isRestParameter(param) && (index + 1) !== parameters.length) {
+                throw new Error(`Rest parameter be last`);
+            }
+        });
     }
 
     private async executeCommand(input: string): Promise<void> {
@@ -95,6 +123,7 @@ export class CLI {
     /** Register multiple commands at once (Alias for registerCommands) */
     commands(commands: Commands) {
         for (const command in commands) {
+            this.checkCommandForErrors(commands[command]);
             this.command(command, commands[command]);
         }
     }

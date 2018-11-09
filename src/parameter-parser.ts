@@ -7,6 +7,20 @@ function convertToType(param: Parameter, passedVal: string): any {
     return passedVal !== "false" && passedVal !== "False";
 }
 
+function requiredParameterCount(parameters: (Parameter | string)[]) {
+    let count = 0;
+    for (const param of parameters) {
+        if (typeof param === "string") {
+            count += 1;
+            continue;
+        }
+
+        if (param.isOptional || param.isRest) continue;
+        count += 1;
+    }
+    return count;
+}
+
 /**
  * Get the parameters object from the remainingPieces of the command string.
  *
@@ -18,18 +32,23 @@ function convertToType(param: Parameter, passedVal: string): any {
 export function parseParameters(command: Command, commandPieces: string[]): any | false {
     if (!command.parameters && (commandPieces.length > 0)) return false;
     if (!command.parameters) return {};
-    if (command.parameters.length !== commandPieces.length) return false;
+    if (command.parameters.length !== requiredParameterCount(command.parameters)) return false;
 
     const params: any = {};
 
-    command.parameters.forEach(param => {
+    for (const param of command.parameters) {
         if (typeof param === "string") {
             params[param] = commandPieces.shift();
             return;
         }
 
+        if (param.isRest) {
+            params[param.label] = commandPieces;
+            break;
+        }
+
         params[param.label] = convertToType(param, commandPieces.shift()!);
-    });
+    }
 
     return params;
 }
