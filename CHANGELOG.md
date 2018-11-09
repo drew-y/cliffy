@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 9 November 2018
+
+### Added
+- Support for optional parameters
+- Support for rest parameters
+
+### Changed
+- The options are specified with `{ label: string }` instead of `{ option: string }`.
+- Most CLI methods return a reference to this, allowing method chaining.
+- command and commands methods have been renamed to addCommand and addCommands respectively
+- If an action does not return a promise, it is assumed to be synchronous. `done` is no longer required.
+
+### Removed
+- Action functions are no longer passed `done`. Return a promise instead.
+
+### Deprecated
+- `command` - use `addCommand` instead.
+- `commands` - use `addCommands` instead.
+- `registerCommands` - use `addCommands` instead.
+
 ## 1.8.0
 
 ### Added

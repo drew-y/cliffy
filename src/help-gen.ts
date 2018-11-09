@@ -1,4 +1,5 @@
-import { StrictCommand } from "./definitions";
+import { Command, Action, Commands } from "./definitions";
+
 const indent = require("indent");
 const columnify = require("columnify");
 
@@ -9,16 +10,17 @@ function columns(data: any) {
     }), 4);
 }
 
-function genUsage(command: string, val: StrictCommand) {
+function genUsage(command: string, val: Command | Action) {
     let usage = `${command} [options]`;
-    if (!val.parameters) return usage;
+    if (val instanceof Function || !val.parameters) return usage;
     for (const param of val.parameters) {
-        usage += ` <${param.label}>`;
+        const label = typeof param === "string" ? param : param.label;
+        usage += ` <${label}>`;
     }
     return usage;
 }
 
-export function printCommandHelp(command: string, val: StrictCommand) {
+export function printCommandHelp(command: string, val: Command) {
     console.log("");
     if (val.description) {
         console.log(`${val.description}\n`);
@@ -30,7 +32,7 @@ export function printCommandHelp(command: string, val: StrictCommand) {
     console.log("");
 }
 
-function printOptions(val: StrictCommand) {
+function printOptions(val: Command) {
     if (val.options && val.options.length > 0) {
         console.log(`Options:\n`);
         const options: any = {};
@@ -39,18 +41,24 @@ function printOptions(val: StrictCommand) {
                 options[`@${opt}`] = "";
                 return;
             }
-            options[`@${opt}`] = opt.description || "";
+
+            options[`@${opt.label}`] = opt.description || "";
         });
         console.log(columns(options));
     }
 }
 
-function printSubCommands(val: StrictCommand) {
+function commandDescription(command: Command | Action): string {
+    if (command instanceof Function) return "";
+    return command.description || "";
+}
+
+function printSubCommands(val: Command) {
     if (val.subcommands) {
         console.log("Sub-Commands:\n");
         const commands: any = {};
         for (const command in val.subcommands) {
-            commands[genUsage(command, val.subcommands[command])] = val.subcommands[command].description || "";
+            commands[genUsage(command, val.subcommands[command])] = commandDescription(val.subcommands[command]);
         }
         console.log(columns(commands));
     }
@@ -60,13 +68,13 @@ export function printOverviewHelp(opts: {
     name?: string;
     info?: string;
     version?: string;
-    commands: { [command: string]: StrictCommand }
+    commands: Commands
 }) {
     const { name, info, commands, version } = opts;
 
     const commandDescriptions: any = {};
     for (const command in commands) {
-        commandDescriptions[genUsage(command, commands[command])] = commands[command].description || "";
+        commandDescriptions[genUsage(command, commands[command])] = commandDescription(commands[command]);
     }
 
     if (name) {

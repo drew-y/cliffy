@@ -49,7 +49,8 @@ function populateOptionsObject(command: Command, options: any) {
             options[opt] = false;
             return;
         }
-        options[opt.option] = false;
+
+        options[opt.label] = false;
     });
 }
 

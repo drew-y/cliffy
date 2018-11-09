@@ -1,3 +1,8 @@
+
+<p align="center">
+  <img width="500" src="./demo.svg">
+</p>
+
 # Cliffy - A Framework For Interactive CLIs
 
 Cliffy is a simple, powerful utility for making interactive command line interfaces.
@@ -12,6 +17,8 @@ with one running node process. Cliffy is NOT an argv parser.
 - Can parse negative numbers
 - Typed parameters
 - Git Style Sub-Commands
+- Optianal parameters  (New in v2)
+- Rest parameters (New in v2)
 - Options
 - Auto generated help
 - Typescript Support
@@ -20,8 +27,6 @@ with one running node process. Cliffy is NOT an argv parser.
 - Options are specified with an `@` symbol. Not `-` or `--`.
 This is what allows Cliffy to parse negatives.
 - Requires node v6+
-- Does not yet support optional parameters
-- Does not yet support rest parameters
 
 ## Quickstart
 
@@ -37,75 +42,46 @@ npm i cliffy # --save if using npm < v5
 import { CLI } from "cliffy";
 
 const cli = new CLI();
+    .setDelimiter("-->")
+    .command("run", {
+        description: "Run somewhere",
+        options: [{ label: "quickly", description: "Run quickly" }],
+        parameters: ["destination"],
+        action: (params, options) => {
+            if (options.quickly) {
+                console.log(`I ran to ${params.destination} quickly`)
+            }
 
-cli.setDelimiter("run command ->");
-
-cli.command("say", {
-    description: "Say a word",
-    options: ["reversed"],
-    parameters: [{ label: "word", type: "string" }],
-    action: (params, options, done) => {
-        if (options.reversed) {
-            console.log(params.word.split("").reverse().join());
-        } else {
-            console.log(params.word)
+            console.log(`I ran to ${params.destination}`)
+        },
+        subcommands: {
+            to: {
+                description: "Run to a destination",
+                parameters: ["destination"],
+                action: params => console.log(`I ran to ${params.destination}`)
+            }
+            from: {
+                description: "Run from a destination",
+                parameters: ["location"],
+                action: params => console.log(`I ran from ${params.location}`)
+            }
         }
-        done();
-    }
-});
-
-cli.command("run", {
-    description: "Run somewhere",
-    options: [
-        { option: "fast", description: "Run fast" },
-        { option: "medium", description: "Run medium fast" },
-        { option: "slow", description: "Run slow" }
-    ],
-    parameters: [{ label: "destination" }],
-    action: (params, options, done) => {
-        console.log(`I ran to ${params.destination}`);
-        done();
-    },
-    subcommands: {
-        to: {
-            description: "Run to a destination",
-            parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
-            },
-        }
-        from: {
-            description: "Run from a destination",
-            parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
-            },
-        }
-    }
-});
-
-cli.show();
+    })
+    .show();
 ```
 
 Result:
 
 ```bash
-$> say hello
-hello
-$> say @reversed hello
-olleh
-$> run to nevada
+--> run to nevada
 I ran to nevada
-$> help
+--> help
 
 Available commands:
 
-    say [options] <word>             Say a word
-    run [options]                    Run somewhere
+    run [options]  <destination>    Run somewhere
 
-$> help run
+--> help run
 
 Run somewhere
 
@@ -115,9 +91,7 @@ Usage:
 
 Options:
 
-   @fast                             Run fast
-   @medium                           Run medium fast
-   @slow                             Run slow
+   @quickly                          Run quickly
 
 Sub-Commands:
 
@@ -145,62 +119,73 @@ Usage:
 const cli = new CLI(opts)
 ```
 
-### `cli.command(name: string, opts: Command): void`
+### `cli.addCommand(name: string, command: Command): this`
 
 Register a command
 
-A command takes a name and an opts object.
+Takes a name and a command object.
 
 The command name is what the user will enter to execute the command.
 
-The opts paramter interfaces are defined as follows:
+The command interface is defined as follows:
+
 ```typescript
 interface Command {
     /**
-     * Required action function. Executed when the user enters the command.
+     * The action to perform when its command is called.
      *
      * parameters is a key value store. Where the key is the parameter label,
-     * and the value is the value entered by the user.
+     * and its value is the value entered by the user.
      *
      * options is a key value store. Key being the option, value being true if the user
      * specified the option, false otherwise.
-     *
-     * done is a function to be called inside the action function when the function is complete.
-     * As an alternative to calling done, the action may also return a Promise which ends the
-     * action when resolved.
-     *
-     * See the action interface bellow.
      */
-    action: Action;
+    action(parameters: any, options: { [key: string]: boolean }): void | Promise<void>;
 
     /** Optional description for documentation */
     description?: string;
 
-    /** An array of options available to the user. The user specifies an option with an @ symbol i.e. @force */
-    options?: ({
-        option: string;
-        description?: string;
-    } | string)[];
+    /**
+     * An array of options available to the user.
+     * The user specifies an option with an @ symbol i.e. @force
+     */
+    options?: (Option | string)[];
 
-    /** All the parameters available to the user. See the parameters interface */
-    parameters?: Parameter[],
+    /**
+     * All the parameters available to the user.
+     * See the parameters interface.
+     *
+     * If a string is passed it is assumed to be string parameter
+     */
+    parameters?: (Parameter | string)[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: { [command: string]: Command },
+    subcommands?: Commands;
 }
 
-interface Action {
-    (parameters: any, options: any, done: () => void): void | Promise<any>;
-}
-
-interface Parameter {
+export interface Parameter {
     label: string;
-    /**
-     * The type to convert the provided value to. Can be a custom converter.
-     * When boolean is specified the param is considered true unless "False" or
-     * "false" is passed
-     */
+
+    /** The type to convert the provided value to. Can be a custom converter. */
     type?: "boolean" | "number" | "string" | ((val: string) => any);
+
+    /** The parameter is optional */
+    optional?: boolean;
+
+    /**
+     * The parameter is a rest parameter.
+     *
+     * If true, the user can pass an indefinite amount of arguments
+     * that are put in an array set in this parameter.
+     **/
+    rest?: boolean;
+
+    /** Optional description for the help menu */
+    description?: string;
+}
+
+export interface Option {
+    label: string;
     description?: string;
 }
 ```
@@ -210,38 +195,26 @@ Example Usage:
 ```typescript
 cli.command("run", {
     description: "Run somewhere",
-    options: [
-        { option: "fast", description: "Run fast" },
-        { option: "medium", description: "Run medium fast" },
-        { option: "slow", description: "Run slow" }
-    ],
+    options: [{ option: "fast", description: "Run fast" }],
     parameters: [{ label: "destination" }],
-    action: (params, options, done) => {
+    action: (params, options) => {
+        if (options.fast) return console.log(`I ran to ${params.destination} quickly`);
         console.log(`I ran to ${params.destination}`);
-        done();
     },
     subcommands: {
         to: {
-            description: "Run to a destination",
             parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
-            },
+            action: params => console.log(`I ran to ${params.destination}`),
         }
         from: {
-            description: "Run from a destination",
             parameters: [{ label: "destination" }],
-            action: (params, options, done) => {
-                console.log(`I ran to ${params.destination}`);
-                done();
-            },
+            action: params => console.log(`I ran to ${params.destination}),
         }
     }
 });
 ```
 
-### `cli.command(name: string, opts: Action): void`
+### `cli.addCommand(name: string, opts: Action): this`
 
 Register a basic command.
 
@@ -255,48 +228,41 @@ Example usage:
 cli.command("speak", () => sayHello("World"));
 ```
 
-### `cli.commands(commands: { [name: string]: Command | Action })`
+### `cli.addCommands(commands: { [name: string]: Command | Action }): this`
 
-Register multiple commands at once. Alias for cli.registerCommands
+Register multiple commands at once.
 
 Example usage:
 
 ```typescript
 cli.commands({
     run: {
-        action(params, options, done) {
+        action(params, options) {
             console.log("Running");
-            done();
         }
     },
 
     jog: {
-        action(params, options, done) {
+        action(params, options) {
             console.log("Jogging");
-            done();
         }
     },
 
     walk: {
-        action(params, options, done) {
+        action(params, options) {
             console.log("Walking");
-            done();
         }
     }
 });
 ```
 
-### `cli.registerCommands(commands: { [name: string]: Command | Action })`
-
-Register multiple commands at once.
-
-### `cli.setDelimiter(delimiter: string)`
+### `cli.setDelimiter(delimiter: string): this`
 
 Set the CLI delimiter
 
 Defaults to: `"$>"`
 
-### `cli.setInfo(info: string)`
+### `cli.setInfo(info: string): this`
 
 Set the CLI info.
 
@@ -305,23 +271,23 @@ If it is set it is shown directly under the CLI name.
 
 Defaults to: `none`
 
-### `cli.setName(name: string)`
+### `cli.setName(name: string): this`
 
 Set the name of the CLI (Shown at the top of the help menu)
 
 Defaults to: `none`
 
-### `cli.setVersion(version: string)`
+### `cli.setVersion(version: string): this`
 
 Set the CLI version. Shown beside the CLI name if set.
 
 Defaults to: `none`
 
-### `cli.show()`
+### `cli.show(): this`
 
 Show the CLI
 
-### `cli.hide()`
+### `cli.hide(): this`
 
 Hide the cli
 

@@ -2,77 +2,57 @@ import { CLI } from "./index";
 
 const cli = new CLI();
 
-cli.setName("Cliffy Example CLI");
-cli.setVersion(require(`${__dirname}/../package.json`).version);
-cli.setInfo("This is an example CLI. Made with Cliffy");
-cli.setDelimiter("example -> ");
+cli
+    .setName("Cliffy Example CLI")
+    .setVersion("2.0.0")
+    .setInfo("This is an example CLI. Made with Cliffy")
+    .setDelimiter("server console -> ")
+    .addCommand("add", {
+        description: "Add something to the server database",
+        action() { console.log("See 'help add'"); },
+        subcommands: {
+            user: {
+                description: "Add a user to the database",
+                parameters: [{ label: "name", description: "Name of the user to add" }],
+                options: [{ label: "admin", description: "The user is an admin" }],
+                action(params, options) {
+                    if (options.admin) {
+                        console.log(`Admin user ${params.name} added`);
+                        return;
+                    }
 
-cli.command("hello", {
-    action: (params, opts, done) => {
-        console.log("Hello Back!");
-        done();
-    }
-});
+                    console.log(`User ${params.name} added`);
+                    return;
+                }
+            },
 
-cli.command("hide", {
-    action() {
-        cli.hide();
-        setTimeout(() => {
-            cli.show();
-        }, 2000);
-        return Promise.resolve();
-    }
-});
-
-cli.command("do", {
-    description: "Preform an action",
-    action: (a, b, c) => c(),
-    subcommands: {
-        something: {
-            options: [
-                "joint",
-                "hi"
-            ],
-            parameters: [
-                { label: "num", type: "number" }
-            ],
-            action: (a, b, c) => {
-                console.log(`I Did Something!`);
-                console.log(a);
-                console.log(b);
-                c();
-            }
-        },
-        nothing: {
-            action: (a, b, c) => {
-                console.log(`I Did Nothing!`);
-                c();
+            group: {
+                description: "Add a group to the database",
+                parameters: [{ label: "name", description: "Name of the group to add" }],
+                action(params) {
+                    console.log(`Group ${params.name} added`);
+                    return;
+                }
             }
         }
-    }
-});
-
-cli.registerCommands({
-    run: {
-        action(params, options, done) {
-            console.log("Running");
-            done();
+    })
+    .addCommand("start", {
+        description: "Start the server",
+        action() {
+            console.log("Server started!");
         }
-    },
-
-    jog: {
-        action(params, options, done) {
-            console.log("Jogging");
-            done();
+    })
+    .addCommand("stop", {
+        description: "Stop the server",
+        action() {
+            console.log("Server started!");
         }
-    },
-
-    walk: {
-        action(params, options, done) {
-            console.log("Walking");
-            done();
+    })
+    .addCommand("bind", {
+        description: "Bind the server to a new address",
+        parameters: [{ label: "address", description: "The address to bind to" }],
+        action(params) {
+            console.log(`Server bound to ${params.address}`);
         }
-    }
-});
-
-cli.show();
+    })
+    .show();
