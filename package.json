@@ -34,7 +34,7 @@
     "mocha": "^5.2.0",
     "mock-streams": "^1.0.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.9.2"
+    "typescript": "^3.1.6"
   },
   "dependencies": {
     "@types/node": "^6.0.0",
