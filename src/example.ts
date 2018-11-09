@@ -45,7 +45,7 @@ cli
     .addCommand("stop", {
         description: "Stop the server",
         action() {
-            console.log("Server started!");
+            console.log("Server stopped!");
         }
     })
     .addCommand("bind", {
