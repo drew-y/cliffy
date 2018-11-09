@@ -137,7 +137,7 @@ export class CLI {
     }
 
     /** Show the CLI */
-    start(): this {
+    show(): this {
         this.readline.resume();
         this.isActive = true;
         this.startREPL();
@@ -145,7 +145,7 @@ export class CLI {
     }
 
     /** Hide the cli */
-    stop(): this {
+    hide(): this {
         this.readline.pause();
         this.isActive = false;
         return this;
