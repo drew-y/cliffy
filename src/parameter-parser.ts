@@ -39,7 +39,7 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
     for (const param of command.parameters) {
         if (typeof param === "string") {
             params[param] = commandPieces.shift();
-            return;
+            continue;
         }
 
         if (param.rest) {
