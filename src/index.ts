@@ -8,7 +8,7 @@ import { parseParameters } from "./parameter-parser";
 export * from "./definitions";
 
 export class CLI {
-    private readonly commands: Commands = {};
+    private readonly cmds: Commands = {};
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
@@ -60,7 +60,7 @@ export class CLI {
 
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
-        const parsedCmd = findPromptedCommand(pieces, this.commands);
+        const parsedCmd = findPromptedCommand(pieces, this.cmds);
         if (!parsedCmd) return this.invalidCommand();
 
         const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);
@@ -93,12 +93,12 @@ export class CLI {
     private help(commandPieces: string[]): void {
         if (commandPieces.length === 0) {
             printOverviewHelp({
-                info: this.info, name: this.name, version: this.version, commands: this.commands
+                info: this.info, name: this.name, version: this.version, commands: this.cmds
             });
             return;
         }
 
-        const commandOpts = findPromptedCommand(commandPieces, this.commands);
+        const commandOpts = findPromptedCommand(commandPieces, this.cmds);
 
         if (!commandOpts) return this.help([]);
 
@@ -120,7 +120,7 @@ export class CLI {
     addCommand(command: string, opts: Command | Action): this;
     addCommand(command: string, opts: Command | Action): this {
         this.checkCommandForErrors(opts);
-        this.commands[command] = opts;
+        this.cmds[command] = opts;
         return this;
     }
 
@@ -133,7 +133,7 @@ export class CLI {
     }
 
     removeCommand(command: string): this {
-        delete this.commands[command];
+        delete this.cmds[command];
         return this;
     }
 
@@ -168,6 +168,36 @@ export class CLI {
     }
 
     hasCommand(cmd: string): boolean {
-        return !!this.commands[cmd];
+        return !!this.cmds[cmd];
+    }
+
+    /**
+     * Register a command.
+     *
+     * @deprecated - Use addCommand instead.
+     */
+    command(command: string, opts: Command | Action): this {
+        console.warn("command is deprecated - use addCommand instead");
+        return this.addCommand(command, opts);
+    }
+
+    /**
+     * Register multiple commands at once (Alias for registerCommands).
+     *
+     * @deprecated - Use addCommands instead.
+     **/
+    commands(commands: Commands): this {
+        console.warn("commands is deprecated - use addCommands instead");
+        return this.addCommands(commands);
+    }
+
+    /**
+     * Register multiple commands at once (Alias for registerCommands).
+     *
+     * @deprecated - Use addCommands instead.
+     **/
+    registerCommands(commands: Commands): this {
+        console.warn("registerCommands is deprecated - use addCommands instead");
+        return this.registerCommands(commands);
     }
 }
