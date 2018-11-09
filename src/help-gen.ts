@@ -41,7 +41,8 @@ function printOptions(val: Command) {
                 options[`@${opt}`] = "";
                 return;
             }
-            options[`@${opt}`] = opt.description || "";
+
+            options[`@${opt.label}`] = opt.description || "";
         });
         console.log(columns(options));
     }
