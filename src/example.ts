@@ -4,7 +4,7 @@ const cli = new CLI();
 
 cli
     .setName("Cliffy Example CLI")
-    .setVersion(require(`${__dirname}/../package.json`).version)
+    .setVersion("2.0.0")
     .setInfo("This is an example CLI. Made with Cliffy")
     .setDelimiter("server console -> ")
     .addCommand("add", {
