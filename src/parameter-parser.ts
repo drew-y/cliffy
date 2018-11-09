@@ -32,7 +32,7 @@ function requiredParameterCount(parameters: (Parameter | string)[]) {
 export function parseParameters(command: Command, commandPieces: string[]): any | false {
     if (!command.parameters && (commandPieces.length > 0)) return false;
     if (!command.parameters) return {};
-    if (command.parameters.length !== requiredParameterCount(command.parameters)) return false;
+    if (command.parameters.length < requiredParameterCount(command.parameters)) return false;
 
     const params: any = {};
 
@@ -43,7 +43,8 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
         }
 
         if (param.rest) {
-            params[param.label] = commandPieces;
+            params[param.label] = commandPieces
+                .map(item => convertToType(param, item));
             break;
         }
 
