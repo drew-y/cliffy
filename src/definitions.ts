@@ -23,8 +23,8 @@ export interface Parameter {
     label: string;
     /** The type to convert the provided value to. Can be a custom converter. */
     type?: "boolean" | "number" | "string" | ((val: string) => any);
-    isOptional?: boolean;
-    isRest?: boolean;
+    optional?: boolean;
+    rest?: boolean;
     description?: string;
 }
 

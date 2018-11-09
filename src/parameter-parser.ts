@@ -15,7 +15,7 @@ function requiredParameterCount(parameters: (Parameter | string)[]) {
             continue;
         }
 
-        if (param.isOptional || param.isRest) continue;
+        if (param.optional || param.rest) continue;
         count += 1;
     }
     return count;
@@ -42,7 +42,7 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
             return;
         }
 
-        if (param.isRest) {
+        if (param.rest) {
             params[param.label] = commandPieces;
             break;
         }

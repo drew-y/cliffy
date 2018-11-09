@@ -27,11 +27,11 @@ export class CLI {
     }
 
     private paramIsRequired(param: Parameter | string) {
-        return typeof param === "string" || !param.isOptional || !param.isRest;
+        return typeof param === "string" || !param.optional || !param.rest;
     }
 
     private isRestParameter(param: Parameter | string) {
-        return !(typeof param === "string") && param.isRest;
+        return !(typeof param === "string") && param.rest;
     }
 
     private checkCommandForErrors(command: Command | Action) {
