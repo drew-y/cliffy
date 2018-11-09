@@ -1,15 +1,14 @@
 import readline = require("readline");
-import { Command, Commands, Action, StrictCommands } from "./definitions";
+import { Command, Commands, Action } from "./definitions";
 import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
-import { parseCommand } from "./command-parser";
+import { findPromptedCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
-import { commandToStrictCommand } from "./helpers";
 
 export * from "./definitions";
 
 export class CLI {
-    private readonly cmdRegistry: StrictCommands = {};
+    private readonly cmdRegistry: Commands = {};
     private readonly readline: readline.ReadLine;
     private delimiter = "$> ";
     private isActive = false;
@@ -30,14 +29,14 @@ export class CLI {
     private async executeCommand(commandStr: string) {
         const pieces = commandStr.split(" ");
         if (pieces[0] === "help") return this.help(pieces.slice(1));
-        const command = parseCommand(pieces, this.cmdRegistry);
-        if (!command) return this.invalidCommand();
-        const options = parseOptions(command.command, command.remainingPieces);
+        const parsedCmd = findPromptedCommand(pieces, this.cmdRegistry);
+        if (!parsedCmd) return this.invalidCommand();
+        const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);
         if (!options) return this.help(pieces);
-        const params = parseParameters(command.command, options.remainingPieces);
+        const params = parseParameters(parsedCmd.command, options.remainingPieces);
         if (!params) return this.help(pieces);
         return new Promise(resolve => {
-            const prom = command.command.action(params, options.options, resolve);
+            const prom = parsedCmd.command.action(params, options.options);
             if (prom instanceof Promise) {
                 prom.then(resolve).catch(e => {
                     console.log(e);
@@ -75,7 +74,7 @@ export class CLI {
             return;
         }
 
-        const commandOpts = parseCommand(commandPieces, this.cmdRegistry);
+        const commandOpts = findPromptedCommand(commandPieces, this.cmdRegistry);
 
         if (!commandOpts) return this.help([]);
 
@@ -95,30 +94,25 @@ export class CLI {
     command(command: string, action: Action): void;
     command(command: string, opts: Command | Action): void;
     command(command: string, opts: Command | Action): void {
-        this.cmdRegistry[command] = commandToStrictCommand(opts);
+        this.cmdRegistry[command] = opts;
     }
 
     /** Register multiple commands at once (Alias for registerCommands) */
     commands(commands: Commands) {
-        this.registerCommands(commands);
-    }
-
-    /** Register multiple commands at once */
-    registerCommands(commands: Commands) {
         for (const command in commands) {
             this.command(command, commands[command]);
         }
     }
 
     /** Show the CLI */
-    async show() {
+    start() {
         this.readline.resume();
         this.isActive = true;
         this.startREPL();
     }
 
     /** Hide the cli */
-    hide() {
+    stop() {
         this.readline.pause();
         this.isActive = false;
     }

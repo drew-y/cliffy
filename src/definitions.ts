@@ -33,7 +33,7 @@ export interface Option {
     description?: string;
 }
 
-interface Command {
+export interface Command {
     action: Action;
 
     /** Optional description for documentation */
