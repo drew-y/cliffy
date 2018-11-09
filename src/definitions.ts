@@ -12,37 +12,51 @@
  * action when resolved.
  */
 export interface Action {
-    (parameters: any, options: any, done: () => void): void | Promise<any>;
+    (parameters: any, options: PassedOptions): void | Promise<void>;
+}
+
+export interface PassedOptions {
+    [key: string]: boolean;
 }
 
 export interface Parameter {
     label: string;
     /** The type to convert the provided value to. Can be a custom converter. */
     type?: "boolean" | "number" | "string" | ((val: string) => any);
+    isOptional?: boolean;
+    isRest?: boolean;
     description?: string;
 }
 
-interface BaseCommand<T extends Commands> {
+export interface Option {
+    label: string;
+    description?: string;
+}
+
+interface Command {
     action: Action;
 
     /** Optional description for documentation */
     description?: string;
 
-    /** An array of options available to the user. The user specifies an option with an @ symbol i.e. @force */
-    options?: ({
-        option: string;
-        description?: string;
-    } | string)[];
+    /**
+     * An array of options available to the user.
+     * The user specifies an option with an @ symbol i.e. @force
+     */
+    options?: (Option | string)[];
 
-    /** All the parameters available to the user. See the parameters interface */
-    parameters?: Parameter[];
+    /**
+     * All the parameters available to the user.
+     * See the parameters interface.
+     *
+     * If a string is passed it is assumed to be string parameter
+     */
+    parameters?: (Parameter | string)[];
 
     /** Sub commands of the command. Follows the same interface as Command */
-    subcommands?: T;
+    subcommands?: Commands;
 }
 
-export type Command = BaseCommand<Commands>;
-export interface Commands { [command: string]: Command | Action; }
-
-export type StrictCommand = BaseCommand<StrictCommands>;
-export interface StrictCommands { [command: string]: StrictCommand; }
+export interface Commands {
+    [command: string]: Command | Action;
+}
