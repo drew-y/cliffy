@@ -1,6 +1,7 @@
 import { Command, Parameter } from "./definitions";
 
-function convertToType(param: Parameter, passedVal: string): any {
+function convertToType(param: Parameter, passedVal: string | undefined): any {
+    if (passedVal === undefined) return undefined;
     if (!param.type || param.type === "string") return passedVal;
     if (param.type === "number") return Number(passedVal);
     if (param.type instanceof Function) return param.type(passedVal);
@@ -48,7 +49,7 @@ export function parseParameters(command: Command, commandPieces: string[]): any 
             break;
         }
 
-        params[param.label] = convertToType(param, commandPieces.shift()!);
+        params[param.label] = convertToType(param, commandPieces.shift());
     }
 
     return params;
