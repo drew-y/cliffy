@@ -1,7 +1,7 @@
 # Cliffy - A Framework For Interactive CLIs
 
 <p align="center">
-  <img width="500" src="https://raw.githubusercontent.com/drew-y/cliffy/master/demo.svg">
+  <img width="500" src="./demo.svg">
 </p>
 
 Cliffy is a simple, powerful utility for making interactive command line interfaces.
