@@ -49,6 +49,7 @@ const cli = new CLI();
         action: (params, options) => {
             if (options.quickly) {
                 console.log(`I ran to ${params.destination} quickly`)
+                return;
             }
 
             console.log(`I ran to ${params.destination}`)
