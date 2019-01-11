@@ -39,7 +39,7 @@ npm i cliffy # --save if using npm < v5
 ```typescript
 import { CLI } from "cliffy";
 
-const cli = new CLI();
+const cli = new CLI()
     .setDelimiter("-->")
     .command("run", {
         description: "Run somewhere",
