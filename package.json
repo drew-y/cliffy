@@ -1,7 +1,7 @@
 {
   "name": "cliffy",
   "version": "2.0.3",
-  "description": "",
+  "description": "A framework for interactive CLIs",
   "main": "dist/index.js",
   "scripts": {
     "test": "tsc && cd dist && mocha",
@@ -23,7 +23,7 @@
     "vorpal",
     "typescript"
   ],
-  "author": "",
+  "author": "Drew Youngwerth",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/drew-y/cliffy/issues"
