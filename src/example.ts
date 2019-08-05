@@ -38,6 +38,7 @@ cli
     })
     .addCommand("start", {
         description: "Start the server",
+        aliases: ["begin", "resume"],
         action() {
             console.log("Server started!");
         }
