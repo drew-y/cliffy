@@ -3,6 +3,7 @@ import { Commands } from "./definitions";
 
 /** Registers the aliases of a command into a dictionary of commands */
 export function registerCommandAliases({ name, command, commands }: {
+    /** Name of the command */
     name: string,
     command: Command | Action,
     commands: Commands
