@@ -4,6 +4,7 @@ import { parseOptions } from "./option-parser";
 import { printCommandHelp, printOverviewHelp } from "./help-gen";
 import { findPromptedCommand } from "./command-parser";
 import { parseParameters } from "./parameter-parser";
+import { registerCommandAliases } from "./helpers";
 
 export * from "./definitions";
 
@@ -108,6 +109,12 @@ export class CLI {
         );
     }
 
+    private removeCommandAliases(commandName: string) {
+        const command = this.cmds[commandName];
+        if (!command || command instanceof Function || !command.aliases) return;
+        command.aliases.forEach(alias => delete this.cmds[alias]);
+    }
+
     /** Set the cli delimiter */
     setDelimiter(delimiter: string): this {
         this.delimiter = delimiter;
@@ -121,6 +128,7 @@ export class CLI {
     addCommand(name: string, command: Command | Action): this {
         this.checkCommandForErrors(command);
         this.cmds[name] = command;
+        registerCommandAliases({ name, command, commands: this.cmds });
         return this;
     }
 
@@ -133,6 +141,7 @@ export class CLI {
     }
 
     removeCommand(command: string): this {
+        this.removeCommandAliases(command);
         delete this.cmds[command];
         return this;
     }

@@ -144,6 +144,9 @@ interface Command {
     /** Optional description for documentation */
     description?: string;
 
+    /** Aliases the command can be accessed from */
+    aliases?: string[];
+
     /**
      * An array of options available to the user.
      * The user specifies an option with an @ symbol i.e. @force

@@ -36,6 +36,9 @@ export interface Option {
 export interface Command {
     action: Action;
 
+    /** Aliases the command can be accessed from */
+    aliases?: string[];
+
     /** Optional description for documentation */
     description?: string;
 
