@@ -14,8 +14,8 @@ function genUsage(command: string, val: Command | Action) {
     let usage = `${command} [options]`;
     if (val instanceof Function || !val.parameters) return usage;
     for (const param of val.parameters) {
-        const label = typeof param === "string" ? param : param.label;
-        usage += ` <${label}>`;
+        if (typeof param === "string") usage += ` <${param}>`;
+        else usage += param.optional ? ` [${param.label}]` : ` <${param.label}>`;
     }
     return usage;
 }
