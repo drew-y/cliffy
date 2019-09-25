@@ -57,7 +57,8 @@ export class CLI {
     }
 
     private async executeCommand(input: string): Promise<void> {
-        const pieces = input.match(/\w+|"[^"]+"/g).map(word=>word.replace(/^"(.+(?="$))"$/, '$1'));
+        const parts = input.match(/\w+|"[^"]+"/g) || [];
+        const pieces = parts.map(word=>word.replace(/^"(.+(?="$))"$/, '$1'));
 
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
