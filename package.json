@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tsc && cd dist && mocha",
     "prepublishOnly": "npm test",
+    "preversion": "npm test",
     "build": "tsc"
   },
   "types": "dist/index.d.ts",

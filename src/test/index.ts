@@ -16,7 +16,7 @@ describe("CLI", function() {
     });
 
     it("Should register a command", function() {
-        cli.addCommand("test", { action() {} });
+        cli.addCommand("test", { action() { } });
         assert.ok(cli.hasCommand("test"));
     });
 
@@ -152,7 +152,8 @@ describe("CLI", function() {
                 options: ["hello", "world"],
                 action(_params, opts) {
                     const correct = opts.hello && !opts.world;
-                    if (correct) { res(); } else { rej(new Error("Bad opts")); }
+                    if (correct) return res();
+                    rej(new Error("Bad opts"));
                 }
             });
             send("test @hello");
