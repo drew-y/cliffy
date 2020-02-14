@@ -79,6 +79,35 @@ describe("CLI", function() {
         });
     });
 
+    it("Should accept single and double quoted parameters", function() {
+        return new Promise((res, rej) => {
+            cli.addCommand("test", {
+                parameters: [
+                    { label: "p1", type: "string" },
+                    { label: "p2", type: "string" }],
+                action(params) {
+                    const correct = params.p1 === "hello \"quoted\" world" && params.p2 === "lovely 'quoted' weather";
+                    if (correct) { res(); } else { rej(new Error("Bad params")); }
+                }
+            });
+            send("test 'hello \"quoted\" world' \"lovely 'quoted' weather\"");
+        });
+    });
+    it("Should accept json-style parameters", function() {
+        return new Promise((res, rej) => {
+            cli.addCommand("test", {
+                parameters: [
+                    { label: "p1", type: "string" }],
+                action(params) {
+                    const correct = params.p1 === "{\"text\":\"This is the weather\"}";
+                    if (correct) { res(); } else { rej(new Error("Bad params")); }
+                }
+            });
+            const testJson = JSON.stringify({text:"This is the weather"});
+            send(`test '${testJson}'`);
+        });
+    });
+
     it("Should throw an error on invalid optional parameter order", function() {
         try {
             cli.addCommand("test", {

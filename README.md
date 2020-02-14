@@ -26,6 +26,22 @@ with one running node process. Cliffy is NOT an argv parser.
 This is what allows Cliffy to parse negatives.
 - Requires node v6+
 
+### Quoted parameters
+
+Parameters may be quoted using either ' (single) or " (double) quotes. For example the command could be
+
+```
+say "Hello World" 'Lovely Weather'
+```
+
+This would give two parameters of `Hello World` and `Lovely Weather`.  When inside the quoted parameter, the other type of quotes can be used. This lets JSON be entered for example.
+
+```
+say '{"text": "This is the weather"}'
+```
+
+Will give a parameter of the string, `{"text": "This is the weather"}` that can then be parsed as JSON.
+
 ## Quickstart
 
 **Installation**:
