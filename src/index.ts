@@ -59,7 +59,7 @@ export class CLI {
     private async executeCommand(input: string): Promise<void> {
         const parts = input.match(/(\w|@|-|\.)+|"[^"]+"|'[^']+'/g) || [];
         const pieces = parts.map(word => word.replace(/^"(.+(?="$))"$/, '$1')).
-                             map(word => word.replace(/^'(.+(?='$))'$/, '$1'));
+            map(word => word.replace(/^'(.+(?='$))'$/, '$1'));
 
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
@@ -160,6 +160,12 @@ export class CLI {
     hide(): this {
         this.readline.pause();
         this.isActive = false;
+        return this;
+    }
+
+    /** Show the help menu */
+    showHelp(): this {
+        this.help([]);
         return this;
     }
 

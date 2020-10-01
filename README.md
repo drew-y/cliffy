@@ -332,9 +332,12 @@ Defaults to: `none`
 
 ### `cli.show(): this`
 
-Show the CLI
+Show the CLI.
 
 ### `cli.hide(): this`
 
-Hide the cli
+Hide the cli.
 
+### `cli.showHelp(): this`
+
+Show the main help menu.
