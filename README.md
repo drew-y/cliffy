@@ -1,5 +1,5 @@
 # Cliffy - A Framework For Interactive CLIs
-
+A nice framework
 <p align="center">
   <img width="500" src="https://raw.githubusercontent.com/drew-y/cliffy/0b6a3939fe2c4455ad13c3745f9606c96d1a8cc3/demo.svg?sanitize=true">
 </p>
