@@ -58,7 +58,7 @@ const cli = new CLI()
                 description: "Run to a destination",
                 parameters: ["destination"],
                 action: params => console.log(`I ran to ${params.destination}`)
-            }m],
+            },
             from: {
                 description: "Run from a destination",
                 parameters: ["location"],
