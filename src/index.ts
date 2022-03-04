@@ -16,15 +16,18 @@ export class CLI {
     private name?: string;
     private info?: string;
     private version?: string;
+    private quietBlank: boolean;
 
     constructor(opts: {
         input?: NodeJS.ReadableStream,
-        output?: NodeJS.WritableStream
+        output?: NodeJS.WritableStream,
+        quietBlank?: boolean,
     } = {}) {
         const input = opts.input || process.stdin;
         const output = opts.output || process.stdout;
         this.readline = readline.createInterface(input, output);
         this.readline.pause();
+        this.quietBlank = opts.quietBlank || false;
     }
 
     private paramIsRequired(param: Parameter | string) {
@@ -64,6 +67,7 @@ export class CLI {
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
         const parsedCmd = findPromptedCommand(pieces, this.cmds);
+        if (!parsedCmd && this.quietBlank) return;
         if (!parsedCmd) return this.invalidCommand();
 
         const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);

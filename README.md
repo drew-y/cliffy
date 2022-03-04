@@ -152,7 +152,9 @@ Interface:
 class CLI {
     constructor(opts: {
         input?: NodeJS.ReadableStream,
-        output?: NodeJS.WritableStream
+        output?: NodeJS.WritableStream,
+         /** Set to true to prevent cliffy from displaying help text after entering a blank line. Defaults to false */
+        quietBlank?: boolean
     } = {})
 }
 ```
@@ -162,7 +164,7 @@ Usage:
 ```typescript
 const cli = new CLI(opts)
 ```
-
+  
 ### `cli.addCommand(name: string, command: Command): this`
 
 Register a command
