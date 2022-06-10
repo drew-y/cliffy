@@ -67,7 +67,7 @@ export class CLI {
         if (pieces[0] === "help") return this.help(pieces.slice(1));
 
         const parsedCmd = findPromptedCommand(pieces, this.cmds);
-        if (!parsedCmd && this.quietBlank) return;
+        if (!parsedCmd && this.quietBlank && pieces.length === 0) return;
         if (!parsedCmd) return this.invalidCommand();
 
         const options = parseOptions(parsedCmd.command, parsedCmd.remainingPieces);
