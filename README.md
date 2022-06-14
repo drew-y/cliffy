@@ -164,7 +164,7 @@ Usage:
 ```typescript
 const cli = new CLI(opts)
 ```
-  
+
 ### `cli.addCommand(name: string, command: Command): this`
 
 Register a command
@@ -242,7 +242,7 @@ export interface Option {
 Example Usage:
 
 ```typescript
-cli.command("run", {
+cli.addCommand("run", {
     description: "Run somewhere",
     options: [{ option: "fast", description: "Run fast" }],
     parameters: [{ label: "destination" }],
@@ -274,7 +274,7 @@ description may not be needed.
 Example usage:
 
 ```typescript
-cli.command("speak", () => sayHello("World"));
+cli.addCommand("speak", () => sayHello("World"));
 ```
 
 ### `cli.addCommands(commands: { [name: string]: Command | Action }): this`
@@ -284,7 +284,7 @@ Register multiple commands at once.
 Example usage:
 
 ```typescript
-cli.commands({
+cli.addCommands({
     run: {
         action(params, options) {
             console.log("Running");
