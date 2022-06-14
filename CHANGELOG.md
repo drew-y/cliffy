@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.1
+
+- Fix an issue where `quietBlank: true` could prevent the invalid command message from showing. (@wolfy01) 
+
 ## 2.5.0
 
 ### Added
 
-- New `quietBlank` option that prevents the help menu from appearing when an blank new line is entered.
+- New `quietBlank` option that prevents the help menu from appearing when an blank new line is entered. (@mbwhite) 
 
 ## 2.4.1 - 15 October 2020
 
